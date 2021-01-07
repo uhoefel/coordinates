@@ -1,0 +1,4 @@
+# java object files
+/target
+/src/main/python/__pycache__
+
