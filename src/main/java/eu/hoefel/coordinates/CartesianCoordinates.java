@@ -46,6 +46,10 @@ import eu.hoefel.utils.Maths;
 @CoordinateSystemSymbols({"cartesian", "cart"})
 public final record CartesianCoordinates(NavigableSet<Axis> axes) implements CoordinateSystem {
 
+	// Note that we do not use validatePosition here, as it is extremely unlikely
+	// that users want an array with such a humongous size (and if they do they will
+	// run into other issues anyway) and the check is probably not worth the cost.
+
 	/** The default axes. */
 	public static final NavigableSet<Axis> DEFAULT_AXES = Axes.of(new Axis(SiBaseUnit.METER));
 
@@ -72,22 +76,6 @@ public final record CartesianCoordinates(NavigableSet<Axis> axes) implements Coo
 		this(Axes.fromArgs(DEFAULT_AXES, ARG_CHECK, args));
 	}
 
-	/**
-	 * Validates the position, i.e. it throws an exception if a dimension of the 
-	 * position is out of range.
-	 * 
-	 * @param position the position to validate
-	 * @throw IllegalArgumentException if the assumptions about the dimensionality 
-	 *		  or the valid range of any dimension of the input are violated.
-	 */
-	private void validatePosition(double[] position) {
-		if (position.length > dimension()) {
-			throw new IllegalArgumentException(
-					"The given dimensionality exceeds the maximum supported dimensionality (%d vs %d)"
-							.formatted(position.length, dimension()));
-		}
-	}
-
 	@Override
 	public int dimension() {
 		return Maths.MAX_ARRAY_SIZE;
@@ -111,7 +99,6 @@ public final record CartesianCoordinates(NavigableSet<Axis> axes) implements Coo
 
 	@Override
 	public double[] toBasePoint(double[] position) {
-		validatePosition(position);
 		return position.clone();
 	}
 
@@ -122,7 +109,6 @@ public final record CartesianCoordinates(NavigableSet<Axis> axes) implements Coo
 
 	@Override
 	public double[] toBaseVector(double[] position, double[] vector) {
-		validatePosition(position);
 		return vector.clone();
 	}
 
@@ -133,26 +119,25 @@ public final record CartesianCoordinates(NavigableSet<Axis> axes) implements Coo
 
 	@Override
 	public double metricCoefficient(double[] position, TensorTransformation behavior, int i, int j) {
-		validatePosition(position);
+		if (i < 0 || j < 0) {
+			throw new IllegalArgumentException("Metric coefficient not available for i=%d, j=%d (too low dimension)"
+					.formatted(i, j));
+		}
 		return i == j ? 1 : 0;
 	}
 
 	@Override
 	public double[][] metricTensor(double[] position, TensorTransformation behavior) {
-		validatePosition(position);
 		return Maths.eye(position.length);
 	}
 
 	@Override
 	public double jacobianDeterminant(double[] position) {
-		validatePosition(position);
 		return 1;
 	}
 
 	@Override
 	public double christoffelSymbol1stKind(double[] position, int i, int j, int k) {
-		validatePosition(position);
-
 		int dim = position.length;
 		if (i < 0 || j < 0 || k < 0 || i >= dim || j >= dim || k >= dim) {
 			throw new IllegalArgumentException(
@@ -165,8 +150,6 @@ public final record CartesianCoordinates(NavigableSet<Axis> axes) implements Coo
 
 	@Override
 	public double christoffelSymbol2ndKind(double[] position, int m, int i, int j) {
-		validatePosition(position);
-
 		int dim = position.length;
 		if (m < 0 || i < 0 || j < 0 || m >= dim || i >= dim || j >= dim) {
 			throw new IllegalArgumentException(
@@ -179,8 +162,6 @@ public final record CartesianCoordinates(NavigableSet<Axis> axes) implements Coo
 
 	@Override
 	public double riemannTensor(double[] position, int mu, int nu, int rho, int sigma) {
-		validatePosition(position);
-
 		int dim = position.length;
 		if (mu < 0 || nu < 0 || rho < 0 || sigma < 0 || mu >= dim || nu >= dim || rho >= dim || sigma >= dim) {
 			throw new IllegalArgumentException(
@@ -198,8 +179,6 @@ public final record CartesianCoordinates(NavigableSet<Axis> axes) implements Coo
 
 	@Override
 	public double ricciTensor(double[] position, int mu, int nu) {
-		validatePosition(position);
-
 		int dim = position.length;
 		if (mu < 0 || nu < 0 || mu >= dim || nu >= dim) {
 			throw new IllegalArgumentException(
@@ -211,7 +190,6 @@ public final record CartesianCoordinates(NavigableSet<Axis> axes) implements Coo
 
 	@Override
 	public double ricciScalar(double[] position) {
-		validatePosition(position);
 		return 0;
 	}
 }

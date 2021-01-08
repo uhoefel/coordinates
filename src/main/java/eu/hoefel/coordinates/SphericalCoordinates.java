@@ -183,8 +183,7 @@ public final record SphericalCoordinates(NavigableSet<Axis> axes) implements Coo
 	@Override
 	public double metricCoefficient(double[] position, TensorTransformation behavior, int i, int j) {
 		if (i < 0 || j < 0) {
-			throw new IllegalArgumentException(("Metric coefficient not available for i=%d, j=%d "
-					+ "(too low dimension, only 3 dimensions [0,1,2] are supported for spherical coordinates)")
+			throw new IllegalArgumentException("Metric coefficient not available for i=%d, j=%d (too low dimension)"
 					.formatted(i, j));
 		}
 		
