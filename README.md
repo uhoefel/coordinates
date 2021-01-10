@@ -3,6 +3,7 @@
 [![](https://img.shields.io/github/issues/uhoefel/coordinates?style=flat-square)](https://github.com/uhoefel/coordinates/issues)
 [![](https://img.shields.io/github/stars/uhoefel/coordinates?style=flat-square)](https://github.com/uhoefel/units/stargazers)
 [![DOI](https://zenodo.org/badge/309825766.svg)](https://zenodo.org/badge/latestdoi/309825766)
+[![Maven Central](https://img.shields.io/maven-central/v/eu.hoefel/coordinates.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22eu.hoefel%22%20AND%20a:%22coordinates%22)
 [![](https://img.shields.io/github/license/uhoefel/coordinates?style=flat-square)](https://choosealicense.com/licenses/mit/)
 
 Coordinates is a [Java](https://openjdk.java.net/) library designed to handle coordinate systems (including curvilinear, non-orthogonal ones).
@@ -15,7 +16,7 @@ Some of the supported features include:
   double[] pos = {1000, 2, 3};
   CoordinateSystems.transform(pos, csys, csys2); // yields {1,2,3} as "m" is the default
   ```
-- numerical implementations for a lot of functions, e.g. the metric tensor, gradients, divergences etc.
+- [numerical implementations](https://github.com/uhoefel/coordinates/blob/master/src/main/java/eu/hoefel/coordinates/CoordinateSystem.java) for a lot of functions, e.g. the metric tensor, gradients, divergences etc.
 - for the coordinate systems shipped symbolic implementations are provided where possible
 - a [python script](https://github.com/uhoefel/coordinates/blob/master/src/main/python/coordinate_system_implementation_generator.py) to easily create full symbolic implementations, including examples (e.g. [here](https://github.com/uhoefel/coordinates/blob/master/src/main/python/six_sphere_coordinates.py)) from the shipped implementations generated via the script
 - full implementations:
