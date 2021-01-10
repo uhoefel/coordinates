@@ -72,16 +72,15 @@ public interface CoordinateSystem {
 	}
 
 	/**
-	 * Gets the maximum dimensionality that the coordinate system supports. Usually,
-	 * but not always, it can handle <em>only</em> that dimensionality.
+	 * Gets the dimensionality that the coordinate system handles. It can handle
+	 * <em>only</em> that dimensionality.
 	 * <p>
 	 * For example:<br>
-	 * {@link CartesianCoordinateSystem} can handle <em>up to</em> the
-	 * {@link Maths#MAX_ARRAY_SIZE maximum array size}, while
-	 * {@link CylindricalCoordinateSystem} can <em>only</em> handle 3D coordinates.
+	 * {@link CartesianCoordinateSystem} can handle <em>whatever</em> dimensionality
+	 * you specify, while {@link CylindricalCoordinateSystem} can <em>only</em>
+	 * handle 3D coordinates.
 	 * 
-	 * @return the maximum dimensionality that can be handled by the coordinate
-	 *         system
+	 * @return the dimensionality that can be handled by the coordinate system
 	 */
 	public int dimension();
 

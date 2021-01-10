@@ -70,7 +70,9 @@ public final record BipolarCoordinates(NavigableSet<Axis> axes, Constant a) impl
 	 *			   same order in which they are specified in the record declaration.
 	 */
 	public BipolarCoordinates(Object... args) {
-		this(Axes.fromArgs(DEFAULT_AXES, args), CoordinateSystems.constantFromArgs(0, args));
+		this(Axes.fromArgs(DEFAULT_AXES, args), 
+				CoordinateSystems.constantFromArgs(0, args)
+					.orElseThrow(() -> new IllegalArgumentException("No Constant found!")));
 	}
 
 	/**

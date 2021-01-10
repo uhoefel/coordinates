@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -20,7 +21,6 @@ import eu.hoefel.unit.Unit;
 import eu.hoefel.unit.Units;
 import eu.hoefel.unit.constant.Constant;
 import eu.hoefel.utils.Maths;
-import eu.hoefel.utils.Strings;
 import eu.hoefel.utils.Types;
 
 /**
@@ -302,12 +302,12 @@ public final class CoordinateSystems {
 	 * @param args the arguments to search for the nth double
 	 * @return the double
 	 */
-	public static final double doubleFromArgs(int n, Object... args) {
+	public static final Optional<Double> doubleFromArgs(int n, Object... args) {
 		int counter = 0;
 		for (Object o : args) {
-			if (isConvertibleToDouble(o) && counter++ == n) return toDouble(o);
+			if (isConvertibleToDouble(o) && counter++ == n) return Optional.of(toDouble(o));
 		}
-		throw new IllegalArgumentException("No %s double found!".formatted(Strings.ordinalNumeral(n)));
+		return Optional.empty();
 	}
 
 	/**
@@ -347,6 +347,65 @@ public final class CoordinateSystems {
 	}
 
 	/**
+	 * Gets the <code>n</code>th int from the given <code>args</code>.
+	 * <p>
+	 * This is intended to be used to extract ints from arguments passed on to an
+	 * implementation of a {@link CoordinateSystem coordinate system}. If the
+	 * implementation requires multiple ints, the <code>n</code> parameter allows to
+	 * extract the <code>n</code>th int from the given <code>args</code>, even if,
+	 * e.g., an {@link Axis} object is given between the ints. Cannot be combined
+	 * with {@link #doubleFromArgs(int, Object...)}, as it recognizes ints as
+	 * doubles as well.
+	 * 
+	 * @param n    the index of the int requested, starting with 0
+	 * @param args the arguments to search for the nth int
+	 * @return the int
+	 */
+	public static final Optional<Integer> intFromArgs(int n, Object... args) {
+		int counter = 0;
+		for (Object o : args) {
+			if (isConvertibleToInt(o) && counter++ == n) return Optional.of(toInt(o));
+		}
+		return Optional.empty();
+	}
+
+	/**
+	 * Checks whether the given object is an int, or can be widened to an int,
+	 * or is a String that can be parsed to an int.
+	 * 
+	 * @param o the object
+	 * @return true if the object can be sensibly converted into an int
+	 */
+	public static final boolean isConvertibleToInt(Object o) {
+		return Types.isCompatible(int.class, o.getClass()) 
+				|| Types.canBeWidened(int.class, o) 
+				|| (o instanceof String s && Maths.isInteger(s));
+	}
+
+	/**
+	 * Gets the int form the given object if the given object is an int, or can
+	 * be widened to an int, or is a String that can be parsed to an int.
+	 * 
+	 * @param o the object
+	 * @return the int
+	 */
+	public static final int toInt(Object o) {
+		if (Types.isCompatible(int.class, o.getClass())) {
+			return (int) o;
+		} else if (Types.canBeWidened(int.class, o)) {
+			if (Types.boxedClass(o.getClass()) == Character.class) {
+				return (int) (char) o;
+			} else {
+				return ((Number) Types.box(o)).intValue();
+			}
+		} else if (o instanceof String s && Maths.isInteger(s)) {
+			return Integer.parseInt(s);
+		} else {
+			throw new IllegalArgumentException(o + " is not an int!");
+		}
+	}
+
+	/**
 	 * Gets the <code>n</code>th Constant from the given <code>args</code>.
 	 * <p>
 	 * This is intended to be used to extract a {@link Constant} from arguments
@@ -367,20 +426,19 @@ public final class CoordinateSystems {
 	 * @param n    the index of the Constant requested, starting with 0
 	 * @param args the arguments to search for the nth constant
 	 * @return the Constant
-	 * @throws IllegalArgumentException if no nth Constant was found
 	 */
-	public static final Constant constantFromArgs(int n, Object... args) {
+	public static final Optional<Constant> constantFromArgs(int n, Object... args) {
 		int counter = 0;
 		for (Object o : args) {
-			if (o instanceof Constant c) {
-				if (counter++ == n) return c;
-			} else if (o instanceof String s && Constant.isConstant(s)) {
-				if (counter++ == n) return Constant.of(s);
-			} else if (isConvertibleToDouble(o)) {
-				if (counter++ == n) return Constant.of(toDouble(o));
+			if (o instanceof Constant c && counter++ == n) {
+				return Optional.of(c);
+			} else if (o instanceof String s && Constant.isConstant(s) && counter++ == n) {
+				return Optional.of(Constant.of(s));
+			} else if (isConvertibleToDouble(o) && counter++ == n) {
+				return Optional.of(Constant.of(toDouble(o)));
 			}
 		}
-		throw new IllegalArgumentException("No %s Constant found!".formatted(Strings.ordinalNumeral(n)));
+		return Optional.empty();
 	}
 
 	/**

@@ -78,7 +78,9 @@ public final record ToroidalCoordinates(NavigableSet<Axis> axes, Constant R) imp
 	 *			   same order in which they are specified in the record declaration.
 	 */
 	public ToroidalCoordinates(Object... args) {
-		this(Axes.fromArgs(DEFAULT_AXES, args), CoordinateSystems.constantFromArgs(0, args));
+		this(Axes.fromArgs(DEFAULT_AXES, args),
+				CoordinateSystems.constantFromArgs(0, args)
+					.orElseThrow(() -> new IllegalArgumentException("No Constant found!")));
 	}
 
 	/**

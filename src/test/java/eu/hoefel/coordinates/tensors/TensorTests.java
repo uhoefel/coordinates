@@ -20,7 +20,7 @@ class TensorTests {
 	@DisplayName("Testing vectorfield transformation")
 	@Test
 	void testVectorfieldTransformation() {
-		CoordinateSystem sys = CoordinateSystem.from("cart");
+		CoordinateSystem sys = CoordinateSystem.from("cart", 3);
 		double[] position = {2,2,3};
 		Function<double[],double[]> tensorfield = Function.identity();
 
@@ -44,7 +44,7 @@ class TensorTests {
 	@DisplayName("Testing tensorfield transformation")
 	@Test
 	void testTensorfieldTransformation() {
-		CoordinateSystem sys = CoordinateSystem.from("cart");
+		CoordinateSystem sys = CoordinateSystem.from("cart", 3);
 		double[] position = {2,3,4};
 		Function<double[],double[][]> tensorfield = pos -> new double[][] {{pos[0],pos[1],pos[2]},{1.5*pos[0],1.5*pos[1],1.5*pos[2]},{2*pos[0],2*pos[1],2*pos[2]}};
 		Function<double[],double[][]> transformedTensorfield = TensorIndexType.COVARIANT.transform(sys, tensorfield, TensorIndexType.COVARIANT);

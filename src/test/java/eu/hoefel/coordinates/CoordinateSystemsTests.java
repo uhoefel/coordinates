@@ -50,7 +50,7 @@ class CoordinateSystemsTests {
 	@DisplayName("Testing cross product")
 	@Test
 	void testCrossProduct() {
-		CoordinateSystem cart = CoordinateSystem.from("cart");
+		CoordinateSystem cart = new CartesianCoordinates(3);
 		double[] w1 = {0,1,0};
 		double[] w2 = {1,0,12};
 		assertArrayEquals(new double[] {12,0,-1}, cart.cross(new double[] {0,0,0}, TensorIndexType.COVARIANT, w1, w2));
@@ -59,6 +59,7 @@ class CoordinateSystemsTests {
 		double[] v2 = {0,1,0};
 		assertArrayEquals(new double[] {-1,0,0}, cart.cross(new double[] {0,0,0}, TensorIndexType.COVARIANT, v1, v2));
 
+		cart = new CartesianCoordinates(4);
 		double[] u1 = {0,0,0,1};
 		double[] u2 = {0,0,1,0};
 		double[] u3 = {0,1,0,0};
@@ -68,7 +69,7 @@ class CoordinateSystemsTests {
 	@DisplayName("Testing dot product")
 	@Test
 	void testDotProduct() {
-		CoordinateSystem cart = CoordinateSystem.from("cart");
+		CoordinateSystem cart = new CartesianCoordinates(4);
 		double[] u1 = {1,2,3,7};
 		double[] u2 = {4,3,2,1};
 		assertEquals(23.0, cart.dot(new double[] {0,0,0,0}, TensorIndexType.COVARIANT, u1, u2));
@@ -97,7 +98,7 @@ class CoordinateSystemsTests {
 	@Test
 	void testDivergence() {
 		// tensor rank 1
-		CoordinateSystem csys = CoordinateSystem.from("cart");
+		CoordinateSystem csys = new CartesianCoordinates(3);
 		Function<double[], Double[]> field = xyz -> new Double[] { -xyz[1], xyz[0] * xyz[1], xyz[2] };
 
 		int numPositionsToTest = 15;
@@ -130,7 +131,7 @@ class CoordinateSystemsTests {
 		}
 
 		// tensor rank 2
-		csys = CoordinateSystem.from("cart");
+		csys = new CartesianCoordinates(3);
 		double[] pos = new double[] {5,2.5,3};
 		Function<double[], double[][]> tensor = xyz -> new double[][] { {xyz[0], xyz[1], xyz[2]}, {1.5 * xyz[0], 1.5 * xyz[1], 1.5 * xyz[2]}, {2 * xyz[0], 2 * xyz[1], 2 * xyz[2]} };
 		assertArrayEquals(new double[] {3,4.5,6}, csys.div(pos, TensorIndexType.COVARIANT, tensor), 2.5e-7);
@@ -139,7 +140,7 @@ class CoordinateSystemsTests {
 	@DisplayName("Testing magnitude")
 	@Test
 	void testMagnitude() {
-		CoordinateSystem csys = CoordinateSystem.from("cart");
+		CoordinateSystem csys = new CartesianCoordinates(3);
 		int numPositionsToTest = 15;
 		
 		// test scalar field
@@ -198,7 +199,7 @@ class CoordinateSystemsTests {
 	@DisplayName("Testing gradient")
 	@Test
 	void testGradient() {
-		CoordinateSystem csys = CoordinateSystem.from("cart");
+		CoordinateSystem csys = new CartesianCoordinates(3);
 		int numPositionsToTest = 15;
 		
 		Random rnd = new Random(125L);
@@ -222,7 +223,7 @@ class CoordinateSystemsTests {
 		}
 
 		// test vector field
-		csys = CoordinateSystem.from("cart");
+		csys = new CartesianCoordinates(3);
 		Function<double[], double[]> vectorfield = position -> new double[] { position[0],position[1],position[0]*position[2] };
 		double[] pos = {0.5,1,2};
 		double[][] expected = {{1,0,2},{0,1,0},{0,0,0.5}};
@@ -245,7 +246,7 @@ class CoordinateSystemsTests {
 	@Test
 	void testCurl() {
 		// test vector field
-		CoordinateSystem csys = CoordinateSystem.from("cart");
+		CoordinateSystem csys = new CartesianCoordinates(3);
 		double[] pos = {0.5,1,2};
 		Function<double[], double[]> vectorfield = position -> new double[] { position[1],-position[0],0 };
 		assertArrayEquals(new double[] {0,0,-2}, csys.curl(pos, TensorIndexType.CONTRAVARIANT, vectorfield), 5e-5);
@@ -261,8 +262,8 @@ class CoordinateSystemsTests {
 	@DisplayName("Testing units on axes")
 	@Test
 	void testAxesUnits() {
-		CoordinateSystem csys = CoordinateSystem.from("cart");
-		CoordinateSystem csys2 = CoordinateSystem.from("cart", new Axis(0, "km"), new Axis(1, "mm"), new Axis(2, "um"));
+		CoordinateSystem csys = new CartesianCoordinates(3);
+		CoordinateSystem csys2 = new CartesianCoordinates(3, new Axis(0, "km"), new Axis(1, "mm"), new Axis(2, "um"));
 		
 		Random rnd = new Random(125L);
 		int numPositionsToTest = 15;

@@ -30,6 +30,10 @@ class DefaultCoordinateSystemProvider implements ArgumentsProvider {
 	 */
 	private static final CoordinateSystem instance(Class<? extends CoordinateSystem> clazz) {
 		List<String> symbols = CoordinateSystems.symbolsFromClass(clazz);
+		if (clazz == CartesianCoordinates.class) {
+			return new CartesianCoordinates(3);
+		}
+
 		try {
 			return CoordinateSystem.from(symbols.get(0), CoordinateSystems.DEFAULT_COORDINATE_SYSTEMS);
 		} catch (Exception e) {
