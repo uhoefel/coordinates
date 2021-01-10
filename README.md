@@ -2,7 +2,7 @@
 
 [![](https://img.shields.io/github/issues/uhoefel/coordinates?style=flat-square)](https://github.com/uhoefel/coordinates/issues)
 [![](https://img.shields.io/github/stars/uhoefel/coordinates?style=flat-square)](https://github.com/uhoefel/units/stargazers)
-[![DOI](https://zenodo.org/badge/309825766.svg)](https://zenodo.org/badge/latestdoi/309825766)
+[![DOI](https://zenodo.org/badge/327729481.svg)](https://zenodo.org/badge/latestdoi/327729481)
 [![Maven Central](https://img.shields.io/maven-central/v/eu.hoefel/coordinates.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22eu.hoefel%22%20AND%20a:%22coordinates%22)
 [![](https://img.shields.io/github/license/uhoefel/coordinates?style=flat-square)](https://choosealicense.com/licenses/mit/)
 
