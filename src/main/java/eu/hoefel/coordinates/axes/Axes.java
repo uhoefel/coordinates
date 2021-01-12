@@ -122,7 +122,7 @@ public final class Axes {
 	 * Constructs an axes object that contains the units for all axes, including the
 	 * default axes.
 	 * 
-	 * @param units the units for the axes
+	 * @param units      the units for the axes
 	 * @param extraUnits additional units required for the parsing of {@code units}
 	 * @return the axes with the specified units
 	 */

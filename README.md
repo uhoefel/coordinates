@@ -11,8 +11,8 @@ Coordinates is a [Java](https://openjdk.java.net/) library designed to handle co
 Some of the supported features include:
 - coordinate systems take [units](https://github.com/uhoefel/units) into account. For example
   ```java
-  CoordinateSystem csys  = new CartesianCoordinates(); // use constructor directly
-  CoordinateSystem csys2 = CoordinateSystem.from("cart", new Axis(0, "km")); // string-based construction
+  CoordinateSystem csys  = new CartesianCoordinates(3); // use constructor directly. 3 for 3D
+  CoordinateSystem csys2 = CoordinateSystem.from("cart", 3, new Axis(0, "km")); // string-based construction
   double[] pos = {1000, 2, 3};
   CoordinateSystems.transform(pos, csys, csys2); // yields {1,2,3} as "m" is the default
   ```
@@ -39,7 +39,7 @@ The artifact can be found at maven central:
 <dependency>
     <groupId>eu.hoefel</groupId>
     <artifactId>coordinates</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
