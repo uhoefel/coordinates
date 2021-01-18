@@ -48,8 +48,10 @@ import eu.hoefel.utils.Types;
  * 
  * @apiNote Implementations have to either implement
  *          {@link #toBasePoint(double[])} and {@link #fromBasePoint(double[])}.
- *          A limited subset of eatures can be provided by providing the
- *          {@link #metricTensor(double[], TensorIndexType)} alone.
+ *          A limited subset of features can be provided by providing the
+ *          {@link #metricTensor(double[], TensorIndexType)} alone. It is
+ *          recommended to use a {@link java.lang.Record record} for the
+ *          implementation.
  */
 public interface CoordinateSystem {
 
@@ -135,12 +137,17 @@ public interface CoordinateSystem {
 	 * coordinate system.
 	 * 
 	 * @param position the position (in the current coordinate system) at which to
-	 *                 evaluate the derivatives necessary for the transformation
-	 * @param vector   the vector (with respect to the natural basis) to transform
+	 *                 evaluate the derivatives necessary for the transformation.
+	 *                 May not be null.
+	 * @param vector   the vector (with respect to the natural basis) to transform.
+	 *                 May not be null.
 	 * @return the vector in the base coordinate system (using natural basis
 	 *         vectors, i.e. they are not necessarily normalized)
 	 */
 	default double[] toBaseVector(double[] position, double[] vector) {
+		Objects.requireNonNull(position);
+		Objects.requireNonNull(vector);
+
 		return vectorTransformation(position, vector, this::toBasePoint);
 	}
 
@@ -149,12 +156,17 @@ public interface CoordinateSystem {
 	 * coordinate system to this coordinate system.
 	 * 
 	 * @param position the position (in the base coordinate system) at which to
-	 *                 evaluate the derivatives necessary for the transformation
-	 * @param vector   the vector (with respect to the natural basis) to transform
+	 *                 evaluate the derivatives necessary for the transformation.
+	 *                 May not be null.
+	 * @param vector   the vector (with respect to the natural basis) to transform.
+	 *                 May not be null
 	 * @return the vector in this coordinate system (using natural basis vectors,
 	 *         i.e. they are not necessarily normalized)
 	 */
 	default double[] fromBaseVector(double[] position, double[] vector) {
+		Objects.requireNonNull(position);
+		Objects.requireNonNull(vector);
+
 		return vectorTransformation(position, vector, this::fromBasePoint);
 	}
 
@@ -227,12 +239,16 @@ public interface CoordinateSystem {
 	 * </code>
 	 * 
 	 * @param name the name representing the coordinate system, e.g. "cart" for the
-	 *             {@link CartesianCoordinateSystem}
+	 *             {@link CartesianCoordinateSystem}. May not be null.
 	 * @param args the arguments to pass on to the constructor that fits most
-	 *             closely the signature of the arguments. Can handle varargs.
+	 *             closely the signature of the arguments. Can handle varargs. May
+	 *             not be null.
 	 * @return a new instance of the specified coordinate system
 	 */
 	public static CoordinateSystem from(String name, Object... args) {
+		Objects.requireNonNull(name);
+		Objects.requireNonNull(args);
+
 		return from(name, CoordinateSystems.DEFAULT_COORDINATE_SYSTEMS, args);
 	}
 
@@ -249,15 +265,21 @@ public interface CoordinateSystem {
 	 * </code>
 	 * 
 	 * @param name             the name representing the coordinate system, e.g.
-	 *                         "cart" for the {@link CartesianCoordinateSystem}
+	 *                         "cart" for the {@link CartesianCoordinateSystem}. May
+	 *                         not be null.
 	 * @param extraCoordinates the coordinate systems of which one contains the
-	 *                         specified name as an allowed representation
+	 *                         specified name as an allowed representation. May not
+	 *                         be null.
 	 * @param args             the arguments to pass on to the constructor that fits
 	 *                         most closely the signature of the arguments. Can
-	 *                         handle varargs.
+	 *                         handle varargs. May not be null.
 	 * @return a new instance of the specified coordinate system
 	 */
 	public static CoordinateSystem from(String name, Set<Class<? extends CoordinateSystem>> extraCoordinates, Object... args) {
+		Objects.requireNonNull(name);
+		Objects.requireNonNull(extraCoordinates);
+		Objects.requireNonNull(args);
+		
 		if (name.isEmpty()) return CoordinateSystems.IDENTITY_COORDINATE_SYSTEM;
 
 		List<String> knownSymbols = new ArrayList<>();
@@ -280,13 +302,15 @@ public interface CoordinateSystem {
 	 * the metric is preserved at the specified point, while it reverses orientation
 	 * if the determinant is negative.
 	 * 
-	 * @param coords the coordinates
+	 * @param position the position, not null
 	 * @return the Jacobian determinant at the specified coordinates
 	 * @see <a href=
 	 *      "https://en.wikipedia.org/wiki/Jacobian_matrix_and_determinant#Jacobian_determinant">Wikipedia</a>
 	 */
-	default double jacobianDeterminant(double[] coords) {
-		return Math.sqrt(Maths.determinant(metricTensor(coords, TensorIndexType.COVARIANT)));
+	default double jacobianDeterminant(double[] position) {
+		Objects.requireNonNull(position);
+
+		return Math.sqrt(Maths.determinant(metricTensor(position, TensorIndexType.COVARIANT)));
 	}
 
 	/**
@@ -330,10 +354,11 @@ public interface CoordinateSystem {
 	 *                       tensor (scalar) field it should be Double, for a first
 	 *                       order tensor (vector) field it should be double[] and
 	 *                       so on
-	 * @param position       the position at which to evaluate the tensor field
+	 * @param position       the position at which to evaluate the tensor field, not
+	 *                       null
 	 * @param transformation the transformation information (i.e. the index
-	 *                       positions) of the given tensor field
-	 * @param tensorfield    the tensor field of arbitrary order
+	 *                       positions) of the given tensor field, not null
+	 * @param tensorfield    the tensor field of arbitrary order, not null
 	 * @return the magnitude of the tensor field
 	 */
 	@SuppressWarnings("unchecked")
@@ -384,11 +409,15 @@ public interface CoordinateSystem {
 	 * transformation behavior (i.e., either {@link TensorIndexType#COVARIANT
 	 * covariant}, {@link TensorIndexType#CONTRAVARIANT contravariant} or mixed).
 	 * 
-	 * @param position the position at which to get the metric tensor
-	 * @param behavior the tensor transformation behavior of the metric coefficients
+	 * @param position the position at which to get the metric tensor, not null
+	 * @param behavior the tensor transformation behavior of the metric
+	 *                 coefficients, not null
 	 * @return the metric tensor
 	 */
 	default double[][] metricTensor(double[] position, TensorTransformation behavior) {
+		Objects.requireNonNull(position);
+		Objects.requireNonNull(behavior);
+
 		int dim = position.length;
 		double[][] partialDerivatives = new double[dim][dim];
 
@@ -423,8 +452,10 @@ public interface CoordinateSystem {
 	 * tensor transformation behavior (i.e., either {@link TensorIndexType#COVARIANT
 	 * covariant}, {@link TensorIndexType#CONTRAVARIANT contravariant} or mixed).
 	 * 
-	 * @param coords   the coordinates at which to get the metric tensor coefficient
-	 * @param behavior the tensor transformation behavior of the metric coefficient
+	 * @param position the position at which to get the metric tensor coefficient,
+	 *                 not null
+	 * @param behavior the tensor transformation behavior of the metric coefficient,
+	 *                 not null
 	 * @param i        the row index in the metric tensor
 	 * @param j        the column index in the metric tensor
 	 * @return the metric tensor coefficient
@@ -435,15 +466,18 @@ public interface CoordinateSystem {
 	 *           advisable to use {@link #metricTensor(double[], TensorIndexType)}
 	 *           and access the coefficients from the locally stored full tensor.
 	 */
-	default double metricCoefficient(double[] coords, TensorTransformation behavior, int i, int j) {
-		return metricTensor(coords, behavior)[i][j];
+	default double metricCoefficient(double[] position, TensorTransformation behavior, int i, int j) {
+		Objects.requireNonNull(position);
+		Objects.requireNonNull(behavior);
+		
+		return metricTensor(position, behavior)[i][j];
 	}
 
 	/**
 	 * Gets the line element for a specific dimension.
 	 * 
 	 * @param position the position (with contravariant components) at which to get
-	 *                 the line element
+	 *                 the line element, not null
 	 * @param i        the dimension for which to get the line element (dimension
 	 *                 indices start at 0)
 	 * @param dui      the (small) change with respect to the <i>i</i>th coordinate
@@ -460,6 +494,8 @@ public interface CoordinateSystem {
 	 *                                  dimensionality
 	 */
 	default double ds(double[] position, int i, double dui) {
+		Objects.requireNonNull(position);
+		
 		if (i >= dimension()) {
 			throw new IllegalArgumentException(
 					"Specified dimension greater than supported dimensionality (given: %d, supported: %d)"
@@ -475,7 +511,7 @@ public interface CoordinateSystem {
 	 * Gets the surface element for the specified dimensions.
 	 * 
 	 * @param position the position (with contravariant components) at which to get
-	 *                 the surface element
+	 *                 the surface element, not null
 	 * @param i        the first of the two dimensions for which to get the surface
 	 *                 element (dimension indices start at 0)
 	 * @param j        the second of the two dimensions for which to get the surface
@@ -497,6 +533,8 @@ public interface CoordinateSystem {
 	 *                                  create a surface
 	 */
 	default double dA(double[] position, int i, int j, double dui, double duj) {
+		Objects.requireNonNull(position);
+
 		if (i == j) {
 			throw new IllegalArgumentException(
 					"To get a surface element the given dimensions i and j must be different, but you specified i=j=%d"
@@ -535,7 +573,7 @@ public interface CoordinateSystem {
 	 * @param position the position (with contravariant components) at which to get
 	 *                 the volume element. May not be null.
 	 * @param du       the (small) changes with respect to the 1,2,...,<i>n</i>th
-	 *                 coordinate
+	 *                 coordinate, not null
 	 * @return the volume element
 	 * 
 	 * @see <a href=
@@ -547,9 +585,10 @@ public interface CoordinateSystem {
 	 *                                  position
 	 */
 	default double dV(double[] position, double... du) {
-		if (du == null) {
-			throw new IllegalArgumentException("du may not be null.");
-		} else if (du.length != position.length) {
+		Objects.requireNonNull(position);
+		Objects.requireNonNull(du);
+
+		if (du.length != position.length) {
 			throw new IllegalArgumentException(
 					"A volume form needs to be of the same dimensionality as the given coordinates. "
 							+ "You specified a %d dimensional position, but du was of dimensionality %d"
@@ -566,11 +605,13 @@ public interface CoordinateSystem {
 	/**
 	 * Calculates the dot (also known as vector inner or scalar) product.
 	 * 
-	 * @param position the position at which to evaluate the dot product
-	 * @param behavior the type components of v1 and v2 with respect to a
-	 *                 basis change
-	 * @param v1       the first vector. Needs to be of the same length as v2.
-	 * @param v2       the second vector. Needs to be of the same length as v1.
+	 * @param position the position at which to evaluate the dot product, not null
+	 * @param behavior the tensor index type for the components of v1 and v2, not
+	 *                 null
+	 * @param v1       the first vector. Needs to be of the same length as v2. May
+	 *                 not be null.
+	 * @param v2       the second vector. Needs to be of the same length as v1. May
+	 *                 not be null.
 	 * @return the dot product
 	 */
 	default double dot(double[] position, TensorIndexType behavior, double[] v1, double[] v2) {
@@ -596,14 +637,15 @@ public interface CoordinateSystem {
 	 * for dimensions &gt;3 this is generalized to be the Hodge dual of the exterior
 	 * product and <i>n</i>-1 vectors, also called external product.
 	 * 
-	 * @param position the position at which to evaluate the cross/external product
+	 * @param position the position at which to evaluate the cross/external product,
+	 *                 not null
 	 * @param behavior the transformation property of v1 and v2 (and potentially
-	 *                 vn), either {@link TensorIndexType#COVARIANT
-	 *                 covariant} or {@link TensorIndexType#CONTRAVARIANT
-	 *                 contravariant}
-	 * @param v1       the first vector
-	 * @param v2       the second vector
-	 * @param vn       additional vectors if calculated for dimensions &gt;3
+	 *                 vn), either {@link TensorIndexType#COVARIANT covariant} or
+	 *                 {@link TensorIndexType#CONTRAVARIANT contravariant}, not null
+	 * @param v1       the first vector, not null
+	 * @param v2       the second vector, not null
+	 * @param vn       additional vectors if calculated for dimensions &gt;3, not
+	 *                 null
 	 * @return the cross/external product with the basis change behavior flipped as
 	 *         compared to the given vectors
 	 */
@@ -659,10 +701,11 @@ public interface CoordinateSystem {
 	 *                          {@code double[]}, if it is of second order it needs
 	 *                          to be {@code double[][]}.
 	 * @param position          the position at which the divergence should be
-	 *                          calculated
-	 * @param componentBehavior the tensor field component behavior
+	 *                          calculated, not null
+	 * @param componentBehavior the tensor field component behavior, not null
 	 * @param field             the tensor field of first order (i.e. a vector
-	 *                          field) or second order (i.e. a matrix field)
+	 *                          field) or second order (i.e. a matrix field), not
+	 *                          null
 	 * @return the divergence of the tensor field at the specified position
 	 * @throws ClassCastException if any of the conditions for T are violated
 	 */
@@ -785,10 +828,10 @@ public interface CoordinateSystem {
 	 *                          {@code double[]} and if it is of second order it
 	 *                          needs to be {@code double[][]}.
 	 * @param position          the position at which the gradient should be
-	 *                          calculated
-	 * @param componentBehavior the tensor field component behavior
+	 *                          calculated, not null
+	 * @param componentBehavior the tensor field component behavior, not null
 	 * @param field             the field. May be a scalar, vector or tensor/matrix
-	 *                          field
+	 *                          field, not null
 	 * @return the physical gradient (i.e. the gradient in terms of the physical
 	 *         basis)
 	 * @throws IllegalArgumentException if the conditions for T are violated
@@ -949,13 +992,15 @@ public interface CoordinateSystem {
 	}
 
 	/**
-	 * Gets the component of the Riemann curvature tensor with the specified indices.
+	 * Gets the component of the Riemann curvature tensor with the specified
+	 * indices.
 	 * 
-	 * @param position the position at which the Riemann tensor should be calculated
-	 * @param mu the upper index
-	 * @param nu the first lower index
-	 * @param rho the second lower index
-	 * @param sigma the third lower index
+	 * @param position the position at which the Riemann tensor should be
+	 *                 calculated, not null
+	 * @param mu       the upper index
+	 * @param nu       the first lower index
+	 * @param rho      the second lower index
+	 * @param sigma    the third lower index
 	 * @return the Riemann tensor <i>R</i><sup><i>µ</i></sup><sub><i>νρσ</i></sub>
 	 */
 	default double riemannTensor(double[] position, int mu, int nu, int rho, int sigma) {
@@ -1015,12 +1060,15 @@ public interface CoordinateSystem {
 	 * can be seen as a measure of how much the current coordinate system deviates
 	 * (locally) from Euclidean space.
 	 * 
-	 * @param position the position at which the Ricci tensor should be calculated
+	 * @param position the position at which the Ricci tensor should be calculated,
+	 *                 not null
 	 * @param mu       the first index
 	 * @param nu       the second index
 	 * @return the Ricci tensor <i>R</i><sub><i>µν</i></sub>
 	 */
 	default double ricciTensor(double[] position, int mu, int nu) {
+		Objects.requireNonNull(position);
+
 		double[] summands = new double[position.length];
 		for (int rho = 0; rho < summands.length; rho++) {
 			summands[rho] = riemannTensor(position, rho, mu, rho, nu);
@@ -1033,10 +1081,13 @@ public interface CoordinateSystem {
 	 * deviation that a small geodesic ball at the given position has from a
 	 * corresponding ball in Euclidean space.
 	 * 
-	 * @param position the position at which the Ricci scalar should be calculated
+	 * @param position the position at which the Ricci scalar should be calculated,
+	 *                 not null
 	 * @return the Ricci scalar <i>R</i>
 	 */
 	default double ricciScalar(double[] position) {
+		Objects.requireNonNull(position);
+
 		double[] summands = new double[position.length * position.length];
 		for (int mu = 0; mu < summands.length; mu++) {
 			for (int nu = 0; nu < summands.length; nu++) {
@@ -1050,10 +1101,11 @@ public interface CoordinateSystem {
 	/**
 	 * Calculates the curl of the given vector field at the given position.
 	 * 
-	 * @param position          the position at which the curl should be calculated
+	 * @param position          the position at which the curl should be calculated,
+	 *                          not null
 	 * @param componentBehavior the transformation behavior of the vector field
-	 *                          components
-	 * @param vectorfield       the vector field
+	 *                          components, not null
+	 * @param vectorfield       the vector field, not null
 	 * @return the curl with contravariant components
 	 */
 	// It would be good to provide a method that also handles matrix fields
@@ -1065,7 +1117,7 @@ public interface CoordinateSystem {
 		if (position.length != 3) {
 			throw new UnsupportedOperationException("Currently only implemented for 3D. "
 					+ "See https://math.stackexchange.com/questions/337971/can-the-curl-operator-be-generalized-to-non-3d "
-					+ "for a potential generlaization.");
+					+ "for a potential generalization.");
 		}
 		
 		var covariantField = componentBehavior.transform(this, vectorfield, TensorIndexType.COVARIANT);
@@ -1111,7 +1163,7 @@ public interface CoordinateSystem {
 	 * they are <em>not</em> components of a third-rank tensor. They characterize
 	 * how the base vectors vary in space.
 	 * 
-	 * @param position the position at which to get the Christoffel symbol
+	 * @param position the position at which to get the Christoffel symbol, not null
 	 * @param m        the index of the first tangent direction (that is not
 	 *                 derived)
 	 * @param i        the index of the second tangent direction (that is partially
@@ -1120,6 +1172,8 @@ public interface CoordinateSystem {
 	 * @return the Christoffel symbol of the second kind
 	 */
 	default double christoffelSymbol2ndKind(double[] position, int m, int i, int j) {
+		Objects.requireNonNull(position);
+
 		int dimension = position.length;
 		double ret = 0;
 		for (int k = 0; k < dimension; k++) {
@@ -1138,13 +1192,15 @@ public interface CoordinateSystem {
 	 * second kind, Christoffel symbols of the first kind characterize how the base
 	 * vectors vary in space, but in metric-corrected coordinates.
 	 * 
-	 * @param position the position at which to get the Christoffel symbol
+	 * @param position the position at which to get the Christoffel symbol, not null
 	 * @param i        the first index
 	 * @param j        the second index
 	 * @param k        the third index
 	 * @return the Christoffel symbol of the first kind
 	 */
 	default double christoffelSymbol1stKind(double[] position, int i, int j, int k) {
+		Objects.requireNonNull(position);
+
 		double ret = 0;
 		for (int m = 0; m < position.length; m++) {
 			ret += metricCoefficient(position, TensorIndexType.COVARIANT, m, k) * christoffelSymbol2ndKind(position, m, i, j);

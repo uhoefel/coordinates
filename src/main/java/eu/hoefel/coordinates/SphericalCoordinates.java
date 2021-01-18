@@ -37,7 +37,7 @@ import eu.hoefel.unit.si.SiDerivedUnit;
  * @param axes the axes defining the coordinate system, not null. Note that the
  *             units of all dimensions, except the first, need to be effectively
  *             dimensionless.
- * @param dimension the dimension, needs to be >2. By default 3.
+ * @param dimension the dimension, needs to be &gt;2. By default 3.
  * 
  * @author Udo Hoefel
  * 

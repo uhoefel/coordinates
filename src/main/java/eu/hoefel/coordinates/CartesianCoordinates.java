@@ -41,7 +41,7 @@ import eu.hoefel.utils.Maths;
  * size.
  * 
  * @param axes the axes defining the coordinate system
- * @param dimension the dimension, needs to be >0. By default 1.
+ * @param dimension the dimension, needs to be &gt;0. By default 1.
  *
  * @author Udo Hoefel
  */
