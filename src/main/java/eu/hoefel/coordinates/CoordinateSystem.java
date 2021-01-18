@@ -50,8 +50,9 @@ import eu.hoefel.utils.Types;
  *          {@link #toBasePoint(double[])} and {@link #fromBasePoint(double[])}.
  *          A limited subset of features can be provided by providing the
  *          {@link #metricTensor(double[], TensorIndexType)} alone. It is
- *          recommended to use a {@link java.lang.Record record} for the
- *          implementation.
+ *          strongly recommended to use a {@link java.lang.Record record} for
+ *          the implementation, otherwise it may not work directly with
+ *          {@link eu.hoefel.quantities}.
  */
 public interface CoordinateSystem {
 
