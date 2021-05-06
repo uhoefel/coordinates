@@ -45,4 +45,4 @@ The artifact can be found at maven central:
 
 Requirements
 ============
-Coordinates is designed to work with Java 15+. It needs preview-features enabled.
+Coordinates is designed to work with Java 17+. It needs preview-features enabled for Java 15+.
