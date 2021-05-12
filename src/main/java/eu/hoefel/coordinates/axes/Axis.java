@@ -51,7 +51,7 @@ public final record Axis(int dimension, Unit unit) {
 	 * @param unit the unit, e.g. {@link SiBaseUnit#METER}
 	 */
 	public Axis(Unit unit) {
-		this(Axes.DEFAULT_DIMENSION, unit.symbols().get(0), unit);
+		this(Axes.DEFAULT_DIMENSION, unit);
 	}
 
 	/**
