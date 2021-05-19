@@ -318,9 +318,7 @@ public final class CoordinateSystems {
 	 * @return true if the object can be sensibly converted into a double
 	 */
 	public static final boolean isConvertibleToDouble(Object o) {
-		return Types.isCompatible(double.class, o.getClass()) 
-				|| Types.canBeWidened(double.class, o) 
-				|| (o instanceof String s && Maths.isDouble(s));
+		return Types.isCompatible(double.class, o) || (o instanceof String s && Maths.isDouble(s));
 	}
 
 	/**
@@ -331,19 +329,22 @@ public final class CoordinateSystems {
 	 * @return the double
 	 */
 	public static final double toDouble(Object o) {
-		if (Types.isCompatible(double.class, o.getClass())) {
-			return (double) o;
-		} else if (Types.canBeWidened(double.class, o)) {
-			if (Types.boxedClass(o.getClass()) == Character.class) {
-				return (double) (char) o;
-			} else {
-				return ((Number) Types.box(o)).doubleValue();
-			}
-		} else if (o instanceof String s && Maths.isDouble(s)) {
-			return Double.parseDouble(s);
-		} else {
-			throw new IllegalArgumentException(o + " is not a double!");
-		}
+	    Objects.requireNonNull(o);
+        
+        if (Types.isCompatible(double.class, o)) {
+            if (Types.boxedClass(o.getClass()) == Character.class) {
+                return (double) (char) o;
+            }
+
+            Object boxed = Types.box(o);
+            if (boxed instanceof Number number) {
+                return number.doubleValue();
+            }
+        } else if (o instanceof String s && Maths.isDouble(s)) {
+            return Double.parseDouble(s);
+        }
+
+        throw new IllegalArgumentException(o + " is not an double and cannot be converted to one!");
 	}
 
 	/**
@@ -377,9 +378,7 @@ public final class CoordinateSystems {
 	 * @return true if the object can be sensibly converted into an int
 	 */
 	public static final boolean isConvertibleToInt(Object o) {
-		return Types.isCompatible(int.class, o.getClass()) 
-				|| Types.canBeWidened(int.class, o) 
-				|| (o instanceof String s && Maths.isInteger(s));
+		return Types.isCompatible(int.class, o) || (o instanceof String s && Maths.isInteger(s));
 	}
 
 	/**
@@ -390,19 +389,22 @@ public final class CoordinateSystems {
 	 * @return the int
 	 */
 	public static final int toInt(Object o) {
-		if (Types.isCompatible(int.class, o.getClass())) {
-			return (int) o;
-		} else if (Types.canBeWidened(int.class, o)) {
-			if (Types.boxedClass(o.getClass()) == Character.class) {
-				return (int) (char) o;
-			} else {
-				return ((Number) Types.box(o)).intValue();
-			}
-		} else if (o instanceof String s && Maths.isInteger(s)) {
-			return Integer.parseInt(s);
-		} else {
-			throw new IllegalArgumentException(o + " is not an int!");
-		}
+	    Objects.requireNonNull(o);
+	    
+	    if (Types.isCompatible(int.class, o)) {
+	        if (Types.boxedClass(o.getClass()) == Character.class) {
+                return (int) (char) o;
+            }
+
+	        Object boxed = Types.box(o);
+	        if (boxed instanceof Number number) {
+	            return number.intValue();
+	        }
+        } else if (o instanceof String s && Maths.isInteger(s)) {
+            return Integer.parseInt(s);
+        }
+
+		throw new IllegalArgumentException(o + " is not an int and cannot be converted to one!");
 	}
 
 	/**
