@@ -49,9 +49,9 @@ public final record ProlateSpheroidalCoordinates(NavigableSet<Axis> axes, Consta
 
 	/** The default axes. */
 	public static final NavigableSet<Axis> DEFAULT_AXES = Axes.of(
-			new Axis(0, SiDerivedUnit.RADIAN),
-			new Axis(1, SiDerivedUnit.RADIAN),
-			new Axis(2, SiDerivedUnit.RADIAN));
+			new Axis(0, SiDerivedUnit.RADIAN, "σ"),
+			new Axis(1, SiDerivedUnit.RADIAN, "τ"),
+			new Axis(2, SiDerivedUnit.RADIAN, "φ"));
 
 	/** Constructs a new prolate spheroidal coordinate system. */
 	public ProlateSpheroidalCoordinates {

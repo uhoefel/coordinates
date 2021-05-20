@@ -41,9 +41,9 @@ public final record BisphericalCoordinates(NavigableSet<Axis> axes, Constant a) 
 
 	/** The default axes. */
 	public static final NavigableSet<Axis> DEFAULT_AXES = Axes.of(
-			new Axis(0, SiDerivedUnit.RADIAN),
-			new Axis(1, SiDerivedUnit.RADIAN),
-			new Axis(2, SiDerivedUnit.RADIAN));
+			new Axis(0, SiDerivedUnit.RADIAN, "σ"),
+			new Axis(1, SiDerivedUnit.RADIAN, "τ"),
+			new Axis(2, SiDerivedUnit.RADIAN, "φ"));
 
 	/** Constructs a new bispherical coordinate system. */
 	public BisphericalCoordinates {

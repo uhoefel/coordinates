@@ -51,9 +51,9 @@ public final record CylindricalCoordinates(NavigableSet<Axis> axes) implements C
 
 	/** The default axes. */
 	public static final NavigableSet<Axis> DEFAULT_AXES = Axes.of(
-			new Axis(0, SiBaseUnit.METER), 
-			new Axis(1, SiDerivedUnit.RADIAN), 
-			new Axis(2, SiBaseUnit.METER));
+			new Axis(0, SiBaseUnit.METER, "ρ"), 
+			new Axis(1, SiDerivedUnit.RADIAN, "φ"), 
+			new Axis(2, SiBaseUnit.METER, "z"));
 
 	/**
 	 * The consumer useful for checking the arguments in

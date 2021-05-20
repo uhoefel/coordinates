@@ -46,7 +46,7 @@ public final class CoordinateSystems {
 	public static final Set<Class<? extends CoordinateSystem>> DEFAULT_COORDINATE_SYSTEMS;
 
 	/** A set of axes containing only one unitless default axis. */
-	private static final NavigableSet<Axis> IDENTITY_AXES = Axes.of(new Axis(Units.EMPTY_UNIT));
+	private static final NavigableSet<Axis> IDENTITY_AXES = Axes.of(new Axis(Axes.DEFAULT_DIMENSION, Units.EMPTY_UNIT, ""));
 	
 	static {
 		IDENTITY_COORDINATE_SYSTEM = new @CoordinateSystemSymbols("") CoordinateSystem() {

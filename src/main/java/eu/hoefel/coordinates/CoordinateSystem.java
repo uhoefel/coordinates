@@ -79,8 +79,8 @@ public interface CoordinateSystem {
 	 * <em>only</em> that dimensionality.
 	 * <p>
 	 * For example:<br>
-	 * {@link CartesianCoordinateSystem} can handle <em>whatever</em> dimensionality
-	 * you specify, while {@link CylindricalCoordinateSystem} can <em>only</em>
+	 * {@link CartesianCoordinates} can handle <em>whatever</em> dimensionality
+	 * you specify, while {@link CylindricalCoordinates} can <em>only</em>
 	 * handle 3D coordinates.
 	 * 
 	 * @return the dimensionality that can be handled by the coordinate system
@@ -198,7 +198,7 @@ public interface CoordinateSystem {
 
 	/**
 	 * Gets the symbols representing this coordinate system, e.g. "cartesian" and
-	 * "cart" for {@link CartesianCoordinateSystem}.
+	 * "cart" for {@link CartesianCoordinates}.
 	 * 
 	 * @return the list of symbols, starting with the preferred symbol
 	 * 
@@ -464,7 +464,7 @@ public interface CoordinateSystem {
 	 * @implNote The default implementation gets the full metric tensor (which might
 	 *           be an expensive operation) and returns just the single coefficient
 	 *           the user asked for. If multiple coefficients are required it is
-	 *           advisable to use {@link #metricTensor(double[], TensorIndexType)}
+	 *           advisable to use {@link #metricTensor(double[], TensorTransformation)}
 	 *           and access the coefficients from the locally stored full tensor.
 	 */
 	default double metricCoefficient(double[] position, TensorTransformation behavior, int i, int j) {

@@ -48,8 +48,8 @@ public final record SphericalCoordinates(NavigableSet<Axis> axes, int dimension)
 
 	/** The default axes. */
 	public static final NavigableSet<Axis> DEFAULT_AXES = Axes.of(
-			new Axis(SiDerivedUnit.RADIAN),
-			new Axis(0, SiBaseUnit.METER));
+			new Axis(Axes.DEFAULT_DIMENSION, SiDerivedUnit.RADIAN, ""),
+			new Axis(0, SiBaseUnit.METER, "r"));
 
 	/** Constructs a new spherical coordinate system. */
 	public SphericalCoordinates {

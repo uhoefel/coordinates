@@ -49,9 +49,21 @@ import eu.hoefel.utils.Maths;
 public final record CartesianCoordinates(NavigableSet<Axis> axes, int dimension) implements CoordinateSystem {
 
 	/** The default axes. */
-	public static final NavigableSet<Axis> DEFAULT_AXES = Axes.of(new Axis(SiBaseUnit.METER));
+	public static final NavigableSet<Axis> DEFAULT_AXES = Axes.of(
+	        new Axis(Axes.DEFAULT_DIMENSION, SiBaseUnit.METER, ""),
+	        // special implementation for x,y,z as they are used most frequently
+	        new Axis(0, SiBaseUnit.METER, "x"),
+	        new Axis(1, SiBaseUnit.METER, "y"),
+	        new Axis(2, SiBaseUnit.METER, "z"));
 
-	/** Constructs a new Cartesian coordinate system. */
+    /**
+     * Constructs a new Cartesian coordinate system.
+     * 
+     * @param axes      the axes defining the coordinate system
+     * @param dimension the dimension, needs to be &gt;0. By default 1.
+     * @throws NullPointerException     if {@code axes} are null
+     * @throws IllegalArgumentException if {@code dimension} is &lt;1
+     */
 	public CartesianCoordinates {
 		Objects.requireNonNull(axes, "Axes may not be null. "
 				+ "Use the DEFAULT_AXES or the empty constructor to get a reasonable default.");

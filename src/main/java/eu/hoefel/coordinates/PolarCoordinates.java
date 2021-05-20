@@ -39,8 +39,8 @@ public final record PolarCoordinates(NavigableSet<Axis> axes) implements Coordin
 
 	/** The default axes. */
 	public static final NavigableSet<Axis> DEFAULT_AXES = Axes.of(
-			new Axis(0, SiBaseUnit.METER),
-			new Axis(1, SiDerivedUnit.RADIAN));
+			new Axis(0, SiBaseUnit.METER, "ρ"),
+			new Axis(1, SiDerivedUnit.RADIAN, "φ"));
 
 	/**
 	 * The consumer useful for checking the arguments in

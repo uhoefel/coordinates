@@ -11,8 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
+import eu.hoefel.coordinates.axes.Axes;
 import eu.hoefel.coordinates.axes.Axis;
 import eu.hoefel.coordinates.tensors.TensorIndexType;
+import eu.hoefel.unit.Unit;
+import eu.hoefel.unit.si.SiBaseUnit;
 import eu.hoefel.utils.Types;
 
 /**
@@ -91,7 +94,7 @@ class CoordinateSystemsTests {
 
 		// quite inaccurate with the default implementation
 		double[] vectorInCoordSys = coordSys.fromBaseVector(coordSys.toBasePoint(position), vector);
-		assertArrayEquals(vector, coordSys.toBaseVector(position, vectorInCoordSys), 9e-4);
+		assertArrayEquals(vector, coordSys.toBaseVector(position, vectorInCoordSys), 9e-8);
 	}
 
 	@DisplayName("Testing divergence")
@@ -286,4 +289,50 @@ class CoordinateSystemsTests {
 			assertEquals(1e6*z, CoordinateSystems.transform(pos, csys, csys2)[2], 1e-8);
 		}
 	}
+
+	@DisplayName("Testing named axes")
+	@Test
+	void testAxisNames() {
+	    CoordinateSystem csys = new CartesianCoordinates(3);
+	    assertEquals("", csys.axis(Axes.DEFAULT_DIMENSION).name());
+	    assertEquals("x", csys.axis(0).name());
+	    assertEquals("y", csys.axis(1).name());
+	    assertEquals("z", csys.axis(2).name());
+	    
+	    csys = new CartesianCoordinates(3, new Axis(0, Unit.of("km"), "y"));
+        assertEquals("y", csys.axis(0).name());
+        assertEquals("y", csys.axis(1).name());
+        assertEquals("z", csys.axis(2).name());
+
+	    csys = new CartesianCoordinates(3, new Axis(0, "km"), new Axis(1, SiBaseUnit.METER, "length"), new Axis(2, "um"));
+	    assertEquals("length", csys.axis(1).name());
+	}
+
+	@DisplayName("Testing Axes helper methods")
+    @Test
+    void testAxesHelpers() {
+        CoordinateSystem csys = new CartesianCoordinates(3, Axes.withUnits(Unit.of("m^-1")));
+        assertEquals(SiBaseUnit.METER, csys.axis(Axes.DEFAULT_DIMENSION).unit());
+        assertEquals(Unit.of("m^-1"), csys.axis(0).unit());
+        assertEquals(Unit.of("m^-1"), csys.axis(1).unit());
+        assertEquals(Unit.of("m^-1"), csys.axis(2).unit());
+        
+        csys = new CartesianCoordinates(3, Axes.withUnits(new String[] { "s^5", "A s^2", "T s^3" }));
+        assertEquals(SiBaseUnit.METER, csys.axis(Axes.DEFAULT_DIMENSION).unit());
+        assertEquals(Unit.of("s^5"),   csys.axis(0).unit());
+        assertEquals(Unit.of("A s^2"), csys.axis(1).unit());
+        assertEquals(Unit.of("T s^3"), csys.axis(2).unit());
+        
+        csys = new CartesianCoordinates(3, Axes.allWithUnits(Unit.of("m^3")));
+        assertEquals(Unit.of("m^3"), csys.axis(Axes.DEFAULT_DIMENSION).unit());
+        assertEquals(Unit.of("m^3"), csys.axis(0).unit());
+        assertEquals(Unit.of("m^3"), csys.axis(1).unit());
+        assertEquals(Unit.of("m^3"), csys.axis(2).unit());
+        
+        csys = new CartesianCoordinates(3, Axes.withNames("x1", "x2", "x3"));
+        assertEquals("", csys.axis(Axes.DEFAULT_DIMENSION).name());
+        assertEquals("x1", csys.axis(0).name());
+        assertEquals("x2", csys.axis(1).name());
+        assertEquals("x3", csys.axis(2).name());
+    }
 }

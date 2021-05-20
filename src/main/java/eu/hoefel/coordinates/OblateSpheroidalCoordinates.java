@@ -50,9 +50,9 @@ public final record OblateSpheroidalCoordinates(NavigableSet<Axis> axes, Constan
 
 	/** The default axes. */
 	public static final NavigableSet<Axis> DEFAULT_AXES = Axes.of(
-			new Axis(0, SiDerivedUnit.RADIAN),
-			new Axis(1, SiDerivedUnit.RADIAN),
-			new Axis(2, SiDerivedUnit.RADIAN));
+			new Axis(0, SiDerivedUnit.RADIAN, "μ"),
+			new Axis(1, SiDerivedUnit.RADIAN, "ν"),
+			new Axis(2, SiDerivedUnit.RADIAN, "φ"));
 
 	/** Constructs a new oblate spheroidal coordinate system. */
 	public OblateSpheroidalCoordinates {

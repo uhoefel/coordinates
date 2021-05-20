@@ -40,8 +40,8 @@ public final record BipolarCoordinates(NavigableSet<Axis> axes, Constant a) impl
 
 	/** The default axes. */
 	public static final NavigableSet<Axis> DEFAULT_AXES = Axes.of(
-			new Axis(0, SiDerivedUnit.RADIAN),
-			new Axis(1, SiDerivedUnit.RADIAN));
+			new Axis(0, SiDerivedUnit.RADIAN, "σ"),
+			new Axis(1, SiDerivedUnit.RADIAN, "τ"));
 
 	/** Constructs a new bipolar coordinate system. */
 	public BipolarCoordinates {

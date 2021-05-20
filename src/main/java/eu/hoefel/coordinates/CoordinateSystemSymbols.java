@@ -44,7 +44,7 @@ public @interface CoordinateSystemSymbols {
 	 * The symbols that represent the coordinate system.
 	 * 
 	 * @return the representations of the coordinate system, e.g. "cartesian" and
-	 *         "cart" for {@link CartesianCoordinateSystem}
+	 *         "cart" for {@link CartesianCoordinates}
 	 */
 	public String[] value();
 }

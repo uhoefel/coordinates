@@ -34,7 +34,10 @@ import eu.hoefel.unit.Units;
 public final record SixSphereCoordinates(NavigableSet<Axis> axes) implements CoordinateSystem {
 
 	/** The default axes. */
-	public static final NavigableSet<Axis> DEFAULT_AXES = Axes.of(new Axis(Unit.of("m^-1")));
+    public static final NavigableSet<Axis> DEFAULT_AXES = Axes.of(
+            new Axis(0, Unit.of("m^-1"), "u"),
+            new Axis(1, Unit.of("m^-1"), "v"), 
+            new Axis(2, Unit.of("m^-1"), "w"));
 
 	/**
 	 * The consumer useful for checking the arguments in
