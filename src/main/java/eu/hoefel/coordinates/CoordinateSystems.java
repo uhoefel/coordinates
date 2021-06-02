@@ -12,6 +12,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Stream;
 
 import eu.hoefel.coordinates.axes.Axes;
 import eu.hoefel.coordinates.axes.Axis;
@@ -303,11 +304,11 @@ public final class CoordinateSystems {
 	 * @return the double
 	 */
 	public static final Optional<Double> doubleFromArgs(int n, Object... args) {
-		int counter = 0;
-		for (Object o : args) {
-			if (isConvertibleToDouble(o) && counter++ == n) return Optional.of(toDouble(o));
-		}
-		return Optional.empty();
+	    return Stream.of(args)
+	                 .filter(CoordinateSystems::isConvertibleToDouble)
+	                 .skip(n)
+	                 .map(CoordinateSystems::toDouble)
+	                 .findFirst();
 	}
 
 	/**

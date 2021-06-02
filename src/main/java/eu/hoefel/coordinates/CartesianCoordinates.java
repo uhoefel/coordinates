@@ -48,13 +48,30 @@ import eu.hoefel.utils.Maths;
 @CoordinateSystemSymbols({"cartesian", "cart"})
 public final record CartesianCoordinates(NavigableSet<Axis> axes, int dimension) implements CoordinateSystem {
 
-	/** The default axes. */
-	public static final NavigableSet<Axis> DEFAULT_AXES = Axes.of(
+    /** The default axes in 1D. */
+    public static final NavigableSet<Axis> DEFAULT_AXES_1D = Axes.of(
+            new Axis(Axes.DEFAULT_DIMENSION, SiBaseUnit.METER, ""),
+            // special implementation for x as it is often used
+            new Axis(0, SiBaseUnit.METER, "x"));
+
+    /** The default axes in 2D. */
+    public static final NavigableSet<Axis> DEFAULT_AXES_2D = Axes.of(
+            new Axis(Axes.DEFAULT_DIMENSION, SiBaseUnit.METER, ""),
+            // special implementation for x,y as they are often used
+            new Axis(0, SiBaseUnit.METER, "x"),
+            new Axis(1, SiBaseUnit.METER, "y"));
+
+	/** The default axes in 3D. */
+	public static final NavigableSet<Axis> DEFAULT_AXES_3D = Axes.of(
 	        new Axis(Axes.DEFAULT_DIMENSION, SiBaseUnit.METER, ""),
 	        // special implementation for x,y,z as they are used most frequently
 	        new Axis(0, SiBaseUnit.METER, "x"),
 	        new Axis(1, SiBaseUnit.METER, "y"),
 	        new Axis(2, SiBaseUnit.METER, "z"));
+
+	/** The default axes in <i>n</i>D. */
+    public static final NavigableSet<Axis> DEFAULT_AXES_ND = Axes.of(
+            new Axis(Axes.DEFAULT_DIMENSION, SiBaseUnit.METER, ""));
 
     /**
      * Constructs a new Cartesian coordinate system.
@@ -66,24 +83,45 @@ public final record CartesianCoordinates(NavigableSet<Axis> axes, int dimension)
      */
 	public CartesianCoordinates {
 		Objects.requireNonNull(axes, "Axes may not be null. "
-				+ "Use the DEFAULT_AXES or the empty constructor to get a reasonable default.");
+				+ "Use the DEFAULT_AXES_<your dimension>D or the empty constructor to get a reasonable default.");
 		
 		if (dimension < 1) {
 			throw new IllegalArgumentException("Dimension must be >0!");
 		}
 	}
 
-	/**
-	 * Constructs a new Cartesian coordinate system.
-	 * 
-	 * @param args the arguments, must be either {@link Axes} or {@link Axis}, which
-	 *             will take precedence over the {@link #DEFAULT_AXES} if given. If
-	 *             no arguments are given, the default axes will be used. The
-	 *             arguments also need to contain an integer to specify the
-	 *             dimension.
-	 */
+    /**
+     * Constructs a new Cartesian coordinate system.
+     * 
+     * @param args the arguments, must be either {@link Axes} or {@link Axis}, which
+     *             will take precedence over the default axes (which are determined
+     *             dynamically depending on the chosen dimension) if given. The
+     *             arguments also need to contain an integer to specify the
+     *             dimension. If no {@link Axes} or {@link Axis} arguments are
+     *             given, the default axes appropriate for the given dimension will
+     *             be used (with special cases for 1D, 2D and 3D).
+     */
 	public CartesianCoordinates(Object... args) {
-		this(Axes.fromArgs(DEFAULT_AXES, args), CoordinateSystems.intFromArgs(0, args).orElse(1));
+        // not particularly nice that we have to walk twice through the args to get the
+        // dimension, but I cannot think of something nicer right now
+        this(Axes.fromArgs(selectDefaultAxesFromDimension(CoordinateSystems.intFromArgs(0, args).orElse(1)), args),
+                CoordinateSystems.intFromArgs(0, args).orElse(1));
+	}
+
+    /**
+     * Selects the appropriate default axes for the given dimension.
+     * 
+     * @param dimension the dimension of the Cartesian coordinates, determining the
+     *                  corresponding default axes
+     * @return the default axes, never null
+     */
+	private static final NavigableSet<Axis> selectDefaultAxesFromDimension(int dimension) {
+	    return switch (dimension) {
+	        case 1  -> DEFAULT_AXES_1D;
+	        case 2  -> DEFAULT_AXES_2D;
+	        case 3  -> DEFAULT_AXES_3D;
+	        default -> DEFAULT_AXES_ND;
+	    };
 	}
 
 	/**

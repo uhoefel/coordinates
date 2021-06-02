@@ -24,14 +24,14 @@ import eu.hoefel.utils.Types;
 /**
  * A coordinate system is a system allowing coordinates (represented by one or
  * more ordered numbers) to mark a position on a manifold (e.g. Euclidean space,
- * here represented by the {@link CartesianCoordinateSystem}). This allows to
- * treat geometrical problems analytically.
+ * here represented by the {@link CartesianCoordinates}). This allows to treat
+ * geometrical problems analytically.
  * <p>
  * Note further that a coordinate system may or may not require state. For
- * example, {@link BipolarCoordinateSystem} require state (one needs to define
- * where the focii are positioned), while e.g.
- * {@link CylindricalCoordinateSystem} can have state (e.g. by having
- * non-default {@link Unit units} on the axes), but do not require it.
+ * example, {@link BipolarCoordinates} require state (one needs to define where
+ * the focii are positioned), while e.g. {@link CylindricalCoordinates} can have
+ * state (e.g. by having non-default {@link Unit units} on the axes), but do not
+ * require it.
  * <p>
  * Note that for some abstract systems complex numbers may be necessary. This is
  * currently not supported. It may be worth thinking about a change there once
@@ -39,17 +39,15 @@ import eu.hoefel.utils.Types;
  * implemented.
  * 
  * @author Udo Hoefel
- * 
  * @see <a href=
  *      "https://csm.mech.utah.edu/content/wp-content/uploads/2011/03/GoBagCurvilinear.pdf">Curvilinear
  *      Analysis in a Euclidean Space by Rebecca Moss Brannon</a>
  * @see <a href="http://faculty.ce.berkeley.edu/sanjay/ce231mse211/curvi.pdf">A
  *      Quick Overview of Curvilinear Coordinates</a>
- * 
  * @apiNote Implementations have to either implement
  *          {@link #toBasePoint(double[])} and {@link #fromBasePoint(double[])}.
  *          A limited subset of features can be provided by providing the
- *          {@link #metricTensor(double[], TensorIndexType)} alone. It is
+ *          {@link #metricTensor(double[], TensorTransformation)} alone. It is
  *          strongly recommended to use a {@link java.lang.Record record} for
  *          the implementation, otherwise it may not work directly with
  *          {@link eu.hoefel.quantities}.
@@ -240,7 +238,7 @@ public interface CoordinateSystem {
 	 * </code>
 	 * 
 	 * @param name the name representing the coordinate system, e.g. "cart" for the
-	 *             {@link CartesianCoordinateSystem}. May not be null.
+	 *             {@link CartesianCoordinates}. May not be null.
 	 * @param args the arguments to pass on to the constructor that fits most
 	 *             closely the signature of the arguments. Can handle varargs. May
 	 *             not be null.
@@ -253,29 +251,29 @@ public interface CoordinateSystem {
 		return from(name, CoordinateSystems.DEFAULT_COORDINATE_SYSTEMS, args);
 	}
 
-	/**
-	 * Gets a new coordinate system from the specified representative name and the
-	 * given arguments. Note that an empty name will always return
-	 * {@link CoordinateSystems#IDENTITY_COORDINATE_SYSTEM}.
-	 * <p>
-	 * Example usage:<br>
-	 * <code>
-	 * Set&lt;Class&lt;? extends CoordinateSystem&gt;&gt; s = Set.of(CartesianCoordinates.class, ToroidalCoordinates.class);<br>
-	 * CoordinateSystem c = CoordinateSystem.from("cart", s);<br>
-	 * c = CoordinateSystem.from("tor", s, 2); // stateful toroidal coordinates (a=2)<br>
-	 * </code>
-	 * 
-	 * @param name             the name representing the coordinate system, e.g.
-	 *                         "cart" for the {@link CartesianCoordinateSystem}. May
-	 *                         not be null.
-	 * @param extraCoordinates the coordinate systems of which one contains the
-	 *                         specified name as an allowed representation. May not
-	 *                         be null.
-	 * @param args             the arguments to pass on to the constructor that fits
-	 *                         most closely the signature of the arguments. Can
-	 *                         handle varargs. May not be null.
-	 * @return a new instance of the specified coordinate system
-	 */
+    /**
+     * Gets a new coordinate system from the specified representative name and the
+     * given arguments. Note that an empty name will always return
+     * {@link CoordinateSystems#IDENTITY_COORDINATE_SYSTEM}.
+     * <p>
+     * Example usage:<br>
+     * <code>
+     * Set&lt;Class&lt;? extends CoordinateSystem&gt;&gt; s = Set.of(CartesianCoordinates.class, ToroidalCoordinates.class);<br>
+     * CoordinateSystem c = CoordinateSystem.from("cart", s);<br>
+     * c = CoordinateSystem.from("tor", s, 2); // stateful toroidal coordinates (a=2)<br>
+     * </code>
+     * 
+     * @param name             the name representing the coordinate system, e.g.
+     *                         "cart" for the {@link CartesianCoordinates}. May not
+     *                         be null.
+     * @param extraCoordinates the coordinate systems of which one contains the
+     *                         specified name as an allowed representation. May not
+     *                         be null.
+     * @param args             the arguments to pass on to the constructor that fits
+     *                         most closely the signature of the arguments. Can
+     *                         handle varargs. May not be null.
+     * @return a new instance of the specified coordinate system
+     */
 	public static CoordinateSystem from(String name, Set<Class<? extends CoordinateSystem>> extraCoordinates, Object... args) {
 		Objects.requireNonNull(name);
 		Objects.requireNonNull(extraCoordinates);

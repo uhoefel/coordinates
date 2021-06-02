@@ -172,7 +172,8 @@ public sealed interface TensorTransformation permits TensorIndexType, MixedTenso
 	 * @return the vector with covariant components if they were given as
 	 *         contravariant components and vice versa
 	 */
-	private static double[] switchVectorIndexPosition(CoordinateSystem sys, double[] position, double[] vector, TensorIndexType transformationProperty) {
+    private static double[] switchVectorIndexPosition(CoordinateSystem sys, double[] position, double[] vector,
+            TensorIndexType transformationProperty) {
 		int dim = vector.length;
         double[][] g = sys.metricTensor(position, transformationProperty);
 		double[] ret = new double[dim];
@@ -260,14 +261,14 @@ public sealed interface TensorTransformation permits TensorIndexType, MixedTenso
 	/**
 	 * Gets the value of the array at the given indices.
 	 * 
-	 * @param <R>     the double array type, i.e. it needs to be a double[] or
+	 * @param <T>     the double array type, i.e. it needs to be a double[] or
 	 *                higher dimensional array
 	 * @param array   the tensor, i.e. a double[] array for a tensor of rank 1,
 	 *                double[][] for a tensor of order 2 and so on
 	 * @param indices the indices to fetch
 	 * @return the value at the given indices
 	 */
-	private static <R> double getTensorValue(R array, int... indices) {
+	private static <T> double getTensorValue(T array, int... indices) {
 		Object o = array;
 		for (int i = 0; i < indices.length - 1; i++) {
 			o = Array.get(o, indices[i]);
