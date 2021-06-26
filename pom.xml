@@ -5,7 +5,7 @@
 
 	<groupId>eu.hoefel</groupId>
 	<artifactId>coordinates</artifactId>
-	<version>1.0.4</version>
+	<version>1.0.5</version>
 	<packaging>jar</packaging>
 
 	<name>coordinates</name>
@@ -85,7 +85,7 @@
 		<dependency>
 			<groupId>eu.hoefel</groupId>
 			<artifactId>utils</artifactId>
-			<version>0.2.2</version>
+			<version>0.2.3</version>
 		</dependency>
 	</dependencies>
 
