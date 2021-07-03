@@ -120,8 +120,6 @@ public final class CoordinateSystems {
 	 */
 	public static final double[] transform(double[] coords, String origin, String target,
 			Set<Class<? extends CoordinateSystem>> extraCoords) {
-		// I would prefer a vararg method here, but that would lead to potential heap
-		// pollution
 		CoordinateSystem originalCoords = CoordinateSystem.from(origin, extraCoords);
 		CoordinateSystem targetCoords = CoordinateSystem.from(target, extraCoords);
 		return transform(coords, originalCoords, targetCoords);
@@ -177,15 +175,15 @@ public final class CoordinateSystems {
 	 * @param target    the target coordinate system
 	 */
 	private static void checkDimensionality(int dimension, CoordinateSystem origin, CoordinateSystem target) {
-		if (origin.dimension() < dimension) {
-			throw new IllegalArgumentException("Dimension of given position exceeds maximum dimension "
-					+ "handleable by the coordinate system of origin (%d vs %d)!".formatted(dimension,
-							origin.dimension()));
-		} else if (target.dimension() < dimension) {
-			throw new IllegalArgumentException("Dimension of given position exceeds maximum dimension "
-					+ "handleable by the target coordinate system (%d vs %d)!".formatted(dimension,
-							target.dimension()));
-		}
+        if (origin.dimension() != dimension) {
+            throw new IllegalArgumentException("Dimension of given position does not match dimensionality "
+                    + "handleable by the coordinate system of origin (%d vs %d)!".formatted(dimension,
+                            origin.dimension()));
+        } else if (target.dimension() != dimension) {
+            throw new IllegalArgumentException("Dimension of given position does not match dimensionality "
+                    + "handleable by the target coordinate system (%d vs %d)!".formatted(dimension,
+                            target.dimension()));
+        }
 	}
 
 	/**
