@@ -12,7 +12,7 @@
  * The {@link eu.hoefel.coordinates.axes} is the package containing axes related
  * classes necessary for each coordinate system. It requires the external
  * dependency {@link eu.hoefel.units} to manage the units on the axes.
- * 
+ * <p>
  * The {@link eu.hoefel.coordinates.tensors} is the package containing classes
  * for basic tensor transformations.
  * 
@@ -23,15 +23,8 @@ module eu.hoefel.coordinates {
 	exports eu.hoefel.coordinates.axes;
 	exports eu.hoefel.coordinates.tensors;
 
-	// ugh...
-	opens eu.hoefel.coordinates to org.junit.platform.commons;
-	opens eu.hoefel.coordinates.axes to org.junit.platform.commons;
-	opens eu.hoefel.coordinates.tensors to org.junit.platform.commons;
-
 	requires java.logging;
 
-	requires org.junit.jupiter.api;
-	
 	requires eu.hoefel.utils;
 	requires transitive eu.hoefel.unit;
 }

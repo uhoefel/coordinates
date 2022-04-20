@@ -44,41 +44,41 @@ import java.util.List;
  */
 public enum TensorIndexType implements TensorTransformation {
 
-	/**
-	 * The components of a vector are said to be covariant if they increase when the
-	 * basis vector length increases and vice versa. Covariancy is denoted by using
-	 * lower indices in Einstein notation.
-	 * 
-	 * @see <a href="https://www.youtube.com/watch?v=CliW7kSxxWU">Tensors Explained
-	 *      Intuitively: Covariant, Contravariant, Rank</a>
-	 */
-	COVARIANT,
+    /**
+     * The components of a vector are said to be covariant if they increase when the
+     * basis vector length increases and vice versa. Covariancy is denoted by using
+     * lower indices in Einstein notation.
+     * 
+     * @see <a href="https://www.youtube.com/watch?v=CliW7kSxxWU">Tensors Explained
+     *      Intuitively: Covariant, Contravariant, Rank</a>
+     */
+    COVARIANT,
 
-	/**
-	 * The components of a vector are said to be contravariant if they decrease when
-	 * the basis vector length increases and vice versa. Contravariancy is denoted
-	 * by using upper indices in Einstein notation. Most vectors have contravariant
-	 * components. For an example see also the picture in
-	 * {@link TensorIndexType}.
-	 * 
-	 * @see <a href="https://www.youtube.com/watch?v=CliW7kSxxWU">Tensors Explained
-	 *      Intuitively: Covariant, Contravariant, Rank</a>
-	 */
-	CONTRAVARIANT;
+    /**
+     * The components of a vector are said to be contravariant if they decrease when
+     * the basis vector length increases and vice versa. Contravariancy is denoted
+     * by using upper indices in Einstein notation. Most vectors have contravariant
+     * components. For an example see also the picture in
+     * {@link TensorIndexType}.
+     * 
+     * @see <a href="https://www.youtube.com/watch?v=CliW7kSxxWU">Tensors Explained
+     *      Intuitively: Covariant, Contravariant, Rank</a>
+     */
+    CONTRAVARIANT;
 
-	/**
-	 * Gets the other behavior with respect to a basis change, i.e. if the current
-	 * behavior with respect to a basis change is {@link #COVARIANT covariant}
-	 * return {@link #CONTRAVARIANT contravariant} and vice versa.
-	 * 
-	 * @return the other behavior with respect to a basis change 
-	 */
-	public TensorIndexType flip() {
-		return this == COVARIANT ? CONTRAVARIANT : COVARIANT;
-	}
+    /**
+     * Gets the other behavior with respect to a basis change, i.e. if the current
+     * behavior with respect to a basis change is {@link #COVARIANT covariant}
+     * return {@link #CONTRAVARIANT contravariant} and vice versa.
+     * 
+     * @return the other behavior with respect to a basis change 
+     */
+    public TensorIndexType flip() {
+        return this == COVARIANT ? CONTRAVARIANT : COVARIANT;
+    }
 
-	@Override
-	public List<TensorIndexType> indexTypes() {
-		return List.of(this);
-	}
+    @Override
+    public List<TensorIndexType> indexTypes() {
+        return List.of(this);
+    }
 }

@@ -14,32 +14,32 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
  */
 class DefaultCoordinateSystemProvider implements ArgumentsProvider {
 
-	@Override
-	public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
-		return CoordinateSystems.DEFAULT_COORDINATE_SYSTEMS
-				.stream()
-				.map(DefaultCoordinateSystemProvider::instance)
-				.map(Arguments::of);
-	}
+    @Override
+    public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+        return CoordinateSystems.DEFAULT_COORDINATE_SYSTEMS
+                .stream()
+                .map(DefaultCoordinateSystemProvider::instance)
+                .map(Arguments::of);
+    }
 
-	/**
-	 * Gets an instance of the specified coordinate system class.
-	 * 
-	 * @param clazz the class of the coordinate system
-	 * @return a coordinate system instance of the specified class
-	 */
-	private static final CoordinateSystem instance(Class<? extends CoordinateSystem> clazz) {
-		List<String> symbols = CoordinateSystems.symbolsFromClass(clazz);
-		if (clazz == CartesianCoordinates.class) {
-			return new CartesianCoordinates(3);
-		}
+    /**
+     * Gets an instance of the specified coordinate system class.
+     * 
+     * @param clazz the class of the coordinate system
+     * @return a coordinate system instance of the specified class
+     */
+    private static final CoordinateSystem instance(Class<? extends CoordinateSystem> clazz) {
+        List<String> symbols = CoordinateSystems.symbolsFromClass(clazz);
+        if (clazz == CartesianCoordinates.class) {
+            return new CartesianCoordinates(3);
+        }
 
-		try {
-			return CoordinateSystem.from(symbols.get(0), CoordinateSystems.DEFAULT_COORDINATE_SYSTEMS);
-		} catch (Exception e) {
-			// So we need one or two additional parameters, probably.
-			// We will just provide some default values
-			return CoordinateSystem.from(symbols.get(0), CoordinateSystems.DEFAULT_COORDINATE_SYSTEMS, "1 m", "1 m", 1.0);
-		}
-	}
+        try {
+            return CoordinateSystem.from(symbols.get(0), CoordinateSystems.DEFAULT_COORDINATE_SYSTEMS);
+        } catch (Exception e) {
+            // So we need one or two additional parameters, probably.
+            // We will just provide some default values
+            return CoordinateSystem.from(symbols.get(0), CoordinateSystems.DEFAULT_COORDINATE_SYSTEMS, "1 m", "1 m", 1.0);
+        }
+    }
 }
