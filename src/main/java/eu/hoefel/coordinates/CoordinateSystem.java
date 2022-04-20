@@ -849,7 +849,7 @@ public interface CoordinateSystem {
         } else if (t instanceof double[]) {
             // gradient of vector field
             @SuppressWarnings("unchecked")
-            T[] grad = (T[]) gradientOfVectorField(position, componentBehavior, (UnaryOperator<double[]>) field);
+            T[] grad = (T[]) gradientOfVectorField(position, componentBehavior, (Function<double[], double[]>) field);
             return grad;
         } else if (t instanceof double[][] tensor) {
              // gradient of matrix field
@@ -914,7 +914,7 @@ public interface CoordinateSystem {
      * @return the physical gradient in terms of the physical basis
      */
     private double[][] gradientOfVectorField(double[] position, TensorTransformation componentBehavior,
-            UnaryOperator<double[]> field) {
+            Function<double[],double[]> field) {
         var fieldWithCovariantComponents = componentBehavior.transform(this, field, TensorIndexType.COVARIANT);
         double[] vector = fieldWithCovariantComponents.apply(position);
         double[][] gradient = new double[vector.length][vector.length];
