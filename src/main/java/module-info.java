@@ -19,12 +19,15 @@
  * @author Udo Hoefel
  */
 module eu.hoefel.coordinates {
-	exports eu.hoefel.coordinates;
-	exports eu.hoefel.coordinates.axes;
-	exports eu.hoefel.coordinates.tensors;
+    exports eu.hoefel.coordinates;
+    exports eu.hoefel.coordinates.axes;
+    exports eu.hoefel.coordinates.tensors;
 
-	requires java.logging;
+    requires java.logging;
 
-	requires eu.hoefel.utils;
-	requires transitive eu.hoefel.unit;
+    requires eu.hoefel.utils;
+    requires transitive eu.hoefel.unit;
+
+    requires static org.junit.jupiter.api;
+    requires static org.junit.jupiter.params;
 }
