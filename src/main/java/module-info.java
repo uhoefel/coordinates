@@ -28,6 +28,10 @@ module eu.hoefel.coordinates {
     requires eu.hoefel.utils;
     requires transitive eu.hoefel.unit;
 
+    opens eu.hoefel.coordinates to org.junit.platform.commons;
+    opens eu.hoefel.coordinates.axes to org.junit.platform.commons;
+    opens eu.hoefel.coordinates.tensors to org.junit.platform.commons;
+
     requires static org.junit.jupiter.api;
     requires static org.junit.jupiter.params;
 }
