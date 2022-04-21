@@ -40,11 +40,11 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.TYPE_USE})
 public @interface CoordinateSystemSymbols {
 
-	/**
-	 * The symbols that represent the coordinate system.
-	 * 
-	 * @return the representations of the coordinate system, e.g. "cartesian" and
-	 *         "cart" for {@link CartesianCoordinates}
-	 */
-	public String[] value();
+    /**
+     * The symbols that represent the coordinate system.
+     * 
+     * @return the representations of the coordinate system, e.g. "cartesian" and
+     *         "cart" for {@link CartesianCoordinates}
+     */
+    public String[] value();
 }

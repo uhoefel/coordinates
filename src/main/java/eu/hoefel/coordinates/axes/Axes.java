@@ -58,31 +58,31 @@ public final class Axes {
             .thenComparing(Axis::unit, (u1, u2) -> Units.COMPARATOR_FOR_UNIT_ORDERING.compare(u1.symbols().get(0), u2.symbols().get(0)))
             .thenComparing(Axis::name);
 
-	/** The units of the dimensions. */
-	private final Unit[] units;
+    /** The units of the dimensions. */
+    private final Unit[] units;
 
-	/** The context in which to use the units to try to infer the axis name. */
-	private final UnitContext[] contexts;
+    /** The context in which to use the units to try to infer the axis name. */
+    private final UnitContext[] contexts;
 
-	/** The axis names. */
-	private final String[] names;
+    /** The axis names. */
+    private final String[] names;
 
-	/** The indicator whether the default dimensions should also be overridden. */
-	private final boolean overrideDefault;
+    /** The indicator whether the default dimensions should also be overridden. */
+    private final boolean overrideDefault;
 
     /** An empty set representing no axis names. */
     private static final NavigableSet<String> EMPTY_AXIS_NAMES = Collections.unmodifiableNavigableSet(new TreeSet<>());
 
-	private static final Logger logger = Logger.getLogger(Axes.class.getName());
+    private static final Logger logger = Logger.getLogger(Axes.class.getName());
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param units           the units of the axes, e.g. "m"
-	 * @param extraUnits      additional units required to parse the given units
-	 * @param overrideDefault if true, indicates that the default axes should also
-	 *                        be changed
-	 */
+    /**
+     * Constructor.
+     * 
+     * @param units           the units of the axes, e.g. "m"
+     * @param extraUnits      additional units required to parse the given units
+     * @param overrideDefault if true, indicates that the default axes should also
+     *                        be changed
+     */
     private Axes(String[] units, Unit[][] extraUnits, boolean overrideDefault) {
         this(Stream.of(units).map(unit -> Unit.of(unit, extraUnits)).toArray(Unit[]::new), null, null, overrideDefault);
     }
@@ -98,58 +98,58 @@ public final class Axes {
      * @param overrideDefault if true, indicates that the default axes should also
      *                        be changed
      */
-	private Axes(Unit[] units, String[] names, UnitContext[] contexts, boolean overrideDefault) {
-		this.units = units;
-		this.names = names;
-		this.contexts = contexts;
-		this.overrideDefault = overrideDefault;
-	}
+    private Axes(Unit[] units, String[] names, UnitContext[] contexts, boolean overrideDefault) {
+        this.units = units;
+        this.names = names;
+        this.contexts = contexts;
+        this.overrideDefault = overrideDefault;
+    }
 
-	/**
-	 * Constructs an axes object that contains the units for all axes, except for
-	 * the default axes.
-	 * 
-	 * @param units the units for the axes
-	 * @return the axes with the specified units
-	 */
-	public static final Axes withUnits(Unit... units) {
-		return new Axes(units, null, null, false);
-	}
+    /**
+     * Constructs an axes object that contains the units for all axes, except for
+     * the default axes.
+     * 
+     * @param units the units for the axes
+     * @return the axes with the specified units
+     */
+    public static final Axes withUnits(Unit... units) {
+        return new Axes(units, null, null, false);
+    }
 
-	/**
-	 * Constructs an axes object that contains the units for all axes, except for
-	 * the default axes.
-	 * 
-	 * @param units      the units for the axes
-	 * @param extraUnits additional units required for the parsing of {@code units}
-	 * @return the axes with the specified units
-	 */
-	public static final Axes withUnits(String[] units, Unit[]... extraUnits) {
-		return new Axes(units, extraUnits, false);
-	}
+    /**
+     * Constructs an axes object that contains the units for all axes, except for
+     * the default axes.
+     * 
+     * @param units      the units for the axes
+     * @param extraUnits additional units required for the parsing of {@code units}
+     * @return the axes with the specified units
+     */
+    public static final Axes withUnits(String[] units, Unit[]... extraUnits) {
+        return new Axes(units, extraUnits, false);
+    }
 
-	/**
-	 * Constructs an axes object that contains the units for all axes, including the
-	 * default axes.
-	 * 
-	 * @param units the units for the axes
-	 * @return the axes with the specified units
-	 */
-	public static final Axes allWithUnits(Unit... units) {
-		return new Axes(units, null, null, true);
-	}
+    /**
+     * Constructs an axes object that contains the units for all axes, including the
+     * default axes.
+     * 
+     * @param units the units for the axes
+     * @return the axes with the specified units
+     */
+    public static final Axes allWithUnits(Unit... units) {
+        return new Axes(units, null, null, true);
+    }
 
-	/**
-	 * Constructs an axes object that contains the units for all axes, including the
-	 * default axes.
-	 * 
-	 * @param units      the units for the axes
-	 * @param extraUnits additional units required for the parsing of {@code units}
-	 * @return the axes with the specified units
-	 */
-	public static final Axes allWithUnits(String[] units, Unit[]... extraUnits) {
-		return new Axes(units, extraUnits, true);
-	}
+    /**
+     * Constructs an axes object that contains the units for all axes, including the
+     * default axes.
+     * 
+     * @param units      the units for the axes
+     * @param extraUnits additional units required for the parsing of {@code units}
+     * @return the axes with the specified units
+     */
+    public static final Axes allWithUnits(String[] units, Unit[]... extraUnits) {
+        return new Axes(units, extraUnits, true);
+    }
 
     /**
      * Constructs an axes object that contains the contexts for all axes, except for
@@ -223,45 +223,45 @@ public final class Axes {
         return contexts != null;
     }
 
-	/**
-	 * Parses the given arguments and constructs a set of axes from them.
-	 * 
-	 * @param defaultAxes the default axes to use
-	 * @param args        the arguments from which to construct the axes
-	 * @return the sorted axes
-	 */
-	private static final NavigableSet<Axis> parseArgs(NavigableSet<Axis> defaultAxes, Object... args) {
-		Objects.requireNonNull(defaultAxes);
-		Objects.requireNonNull(args);
+    /**
+     * Parses the given arguments and constructs a set of axes from them.
+     * 
+     * @param defaultAxes the default axes to use
+     * @param args        the arguments from which to construct the axes
+     * @return the sorted axes
+     */
+    private static final NavigableSet<Axis> parseArgs(NavigableSet<Axis> defaultAxes, Object... args) {
+        Objects.requireNonNull(defaultAxes);
+        Objects.requireNonNull(args);
 
-		var axes = new TreeSet<>(AXIS_DIM_COMPARATOR);
-		axes.addAll(defaultAxes);
+        var axes = new TreeSet<>(AXIS_DIM_COMPARATOR);
+        axes.addAll(defaultAxes);
 
-		var unitInfos = new ArrayList<Axes>();
-		var nameInfos = new ArrayList<Axes>();
-		var contextInfos = new ArrayList<Axes>();
-		for (Object arg : args) {
-			if (arg instanceof Axes a) {
-			    if (a.hasUnitInfo()) unitInfos.add(a);
-			    if (a.hasNameInfo()) nameInfos.add(a);
-			    if (a.hasContextInfo()) contextInfos.add(a);
-			}
-		}
-		
-		unitInfos.forEach(a -> updateUnits(a, axes));
-		contextInfos.forEach(a -> updateContexts(a, axes));
-		nameInfos.forEach(a -> updateNames(a, axes));
-		
-		// directly provided Axis should take precedence
-		for (Object arg : args) {
+        var unitInfos = new ArrayList<Axes>();
+        var nameInfos = new ArrayList<Axes>();
+        var contextInfos = new ArrayList<Axes>();
+        for (Object arg : args) {
+            if (arg instanceof Axes a) {
+                if (a.hasUnitInfo()) unitInfos.add(a);
+                if (a.hasNameInfo()) nameInfos.add(a);
+                if (a.hasContextInfo()) contextInfos.add(a);
+            }
+        }
+        
+        unitInfos.forEach(a -> updateUnits(a, axes));
+        contextInfos.forEach(a -> updateContexts(a, axes));
+        nameInfos.forEach(a -> updateNames(a, axes));
+        
+        // directly provided Axis should take precedence
+        for (Object arg : args) {
             if (arg instanceof Axis axis) {
                 axes.removeIf(val -> val.dimension() == axis.dimension());
                 axes.add(axis);
             }
         }
-		
-		return axes;
-	}
+        
+        return axes;
+    }
 
     /**
      * Updates the {@code axisSet} with the unit information from the {@code axes}.
@@ -269,7 +269,7 @@ public final class Axes {
      * @param axes    the axes containing unit infos
      * @param axisSet the axis set to update
      */
-	private static void updateUnits(Axes axes, TreeSet<Axis> axisSet) {
+    private static void updateUnits(Axes axes, TreeSet<Axis> axisSet) {
         AtomicInteger counter = new AtomicInteger();
         BiFunction<Axis, Axes, Axis> nac = (axis, laxes) -> {
             int i = counter.getAndIncrement();
@@ -306,7 +306,7 @@ public final class Axes {
      * @param axes    the axes containing names infos
      * @param axisSet the axis set to update
      */
-	private static void updateNames(Axes axes, TreeSet<Axis> axisSet) {
+    private static void updateNames(Axes axes, TreeSet<Axis> axisSet) {
         AtomicInteger counter = new AtomicInteger();
         BiFunction<Axis, Axes, Axis> nac = (axis, laxes) -> {
             int i = counter.getAndIncrement();
@@ -352,7 +352,7 @@ public final class Axes {
      * @param axisSet     the axis set to update
      * @param axisUpdater the function used to update an axis
      */
-	private static void update(Axes axes, TreeSet<Axis> axisSet, BiFunction<Axis, Axes, Axis> axisUpdater) {
+    private static void update(Axes axes, TreeSet<Axis> axisSet, BiFunction<Axis, Axes, Axis> axisUpdater) {
         if (axes.overrideDefault) {
             // we override everything in order
             var axesToChange = new TreeSet<>(axisSet);
@@ -376,18 +376,18 @@ public final class Axes {
     }
 
     /**
-	 * Creates a set of axes from the given arguments. Intended as a helper method
-	 * in the constructor when implementing new coordinate systems. Does not check
-	 * the inputs, in contrast to {@link #fromArgs(NavigableSet, Consumer,
-	 * Object...)}.
-	 * 
-	 * @param defaultAxes the default axes to use
-	 * @param args        the (input) arguments from which to construct the axes
-	 * @return the sorted axes (usually of a coordinate system)
-	 */
-	public static final NavigableSet<Axis> fromArgs(NavigableSet<Axis> defaultAxes, Object... args) {
-		return parseArgs(defaultAxes, args);
-	}
+     * Creates a set of axes from the given arguments. Intended as a helper method
+     * in the constructor when implementing new coordinate systems. Does not check
+     * the inputs, in contrast to {@link #fromArgs(NavigableSet, Consumer,
+     * Object...)}.
+     * 
+     * @param defaultAxes the default axes to use
+     * @param args        the (input) arguments from which to construct the axes
+     * @return the sorted axes (usually of a coordinate system)
+     */
+    public static final NavigableSet<Axis> fromArgs(NavigableSet<Axis> defaultAxes, Object... args) {
+        return parseArgs(defaultAxes, args);
+    }
 
     /**
      * Creates a set of axes from the given arguments. Intended as a helper method
@@ -400,14 +400,14 @@ public final class Axes {
      * @throws NullPointerException if {@code defaultAxes}, {@code argCheck} or
      *                              {@code args} is null
      */
-	public static final NavigableSet<Axis> fromArgs(NavigableSet<Axis> defaultAxes, Consumer<Object[]> argCheck, Object... args) {
-		Objects.requireNonNull(defaultAxes);
-		Objects.requireNonNull(argCheck);
-		Objects.requireNonNull(args);
+    public static final NavigableSet<Axis> fromArgs(NavigableSet<Axis> defaultAxes, Consumer<Object[]> argCheck, Object... args) {
+        Objects.requireNonNull(defaultAxes);
+        Objects.requireNonNull(argCheck);
+        Objects.requireNonNull(args);
 
-		argCheck.accept(args);
-		return parseArgs(defaultAxes, args);
-	}
+        argCheck.accept(args);
+        return parseArgs(defaultAxes, args);
+    }
 
     /**
      * Creates an unmodifiable set of the given axes. If an axis is added with a
@@ -419,15 +419,15 @@ public final class Axes {
      * @return the set of axes
      * @throws NullPointerException if {@code axes} is null
      */
-	public static final NavigableSet<Axis> of(Axis... axes) {
-		Objects.requireNonNull(axes);
+    public static final NavigableSet<Axis> of(Axis... axes) {
+        Objects.requireNonNull(axes);
 
-		NavigableSet<Axis> ret = new TreeSet<>(AXIS_DIM_COMPARATOR);
-		for (Axis axis : axes) {
-			if (!ret.add(axis)) {
-				logger.warning(() -> "Overriding already existing axis for dimension %d!".formatted(axis.dimension()));
-			}
-		}
-		return Collections.unmodifiableNavigableSet(ret);
-	}
+        NavigableSet<Axis> ret = new TreeSet<>(AXIS_DIM_COMPARATOR);
+        for (Axis axis : axes) {
+            if (!ret.add(axis)) {
+                logger.warning(() -> "Overriding already existing axis for dimension %d!".formatted(axis.dimension()));
+            }
+        }
+        return Collections.unmodifiableNavigableSet(ret);
+    }
 }
