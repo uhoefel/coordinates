@@ -141,7 +141,7 @@ public sealed interface TensorTransformation permits TensorIndexType, MixedTenso
                 Supplier<int[]> indices = tensorIndices(targetRank, dim, i);
                 for (int dummy = 0; dummy < numEvals; dummy++) {
                     int[] idx = indices.get(); // this updates each loop iteration
-                    double[] tensorValues = getTensorValues(preCurrentTransformationTensor, targetRank, dim, i, idx);
+                    double[] tensorValues = getTensorValues(preCurrentTransformationTensor, dim, i, idx);
                     double[] result = new double[dim];
                     for (int j = 0; j < dim; j++) {
                         for (int k = 0; k < dim; k++) {
@@ -239,8 +239,6 @@ public sealed interface TensorTransformation permits TensorIndexType, MixedTenso
      *                  higher dimensional array
      * @param array     the tensor, i.e. a double[] array for a tensor of rank 1,
      *                  double[][] for a tensor of order 2 and so on
-     * @param rank      the rank (i.e., the dimensionality of the array, e.g. rank 2
-     *                  would correspond to a double[][] array)
      * @param dimension the length of the array
      * @param index     the index of which the values are desired
      * @param indices   the indices to fetch (except that the specified index in the
@@ -248,7 +246,7 @@ public sealed interface TensorTransformation permits TensorIndexType, MixedTenso
      * @return the values of the tensor for the fixed, specified indices and the
      *         given, variable index in the indices
      */
-    private static <R> double[] getTensorValues(R array, int rank, int dimension, int index, int[] indices) {
+    private static <R> double[] getTensorValues(R array, int dimension, int index, int[] indices) {
         List<Double> values = new ArrayList<>();
         int[] summandIndices = indices.clone();
         for (int i = 0; i < dimension; i++) {

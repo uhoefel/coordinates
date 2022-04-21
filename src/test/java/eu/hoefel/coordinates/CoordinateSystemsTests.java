@@ -186,7 +186,7 @@ class CoordinateSystemsTests {
             double y = Math.random();
             double z = (Math.random() > 0.5 ? 1 : -1) * Math.random();
             double[] pos = new double[] {x, y, z};
-            
+
             double correction = x*x;
             double expected = Math.sqrt(x*x + correction*y*y + z*z 
                     + correction*1.5*x*1.5*x + correction*correction*1.5*y*1.5*y + correction*1.5*z*1.5*z
