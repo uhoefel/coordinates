@@ -222,14 +222,12 @@
             </plugin>
 
             <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M6</version>
+                <groupId>de.sormuras.junit</groupId>
+                <artifactId>junit-platform-maven-plugin</artifactId>
+                <version>1.1.6</version>
+                <extensions>true</extensions> <!-- Necessary to execute it in 'test' phase. -->
                 <configuration>
-                    <!-- required due to https://github.com/apache/maven-surefire/pull/263 -->
-                    <argLine>${jvm.extraArgs} --add-exports
-                        org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED
-                        --add-exports
-                        org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED</argLine>
+                    <isolation>NONE</isolation> <!-- Version 1.0.0 defaults to ABSOLUTE. -->
                 </configuration>
             </plugin>
 
