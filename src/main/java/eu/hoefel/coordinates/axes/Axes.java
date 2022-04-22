@@ -247,11 +247,11 @@ public final class Axes {
                 if (a.hasContextInfo()) contextInfos.add(a);
             }
         }
-        
+
         unitInfos.forEach(a -> updateUnits(a, axes));
         contextInfos.forEach(a -> updateContexts(a, axes));
         nameInfos.forEach(a -> updateNames(a, axes));
-        
+
         // directly provided Axis should take precedence
         for (Object arg : args) {
             if (arg instanceof Axis axis) {
@@ -259,7 +259,7 @@ public final class Axes {
                 axes.add(axis);
             }
         }
-        
+
         return axes;
     }
 
@@ -296,7 +296,7 @@ public final class Axes {
             }
             return new Axis(axis.dimension(), axis.unit(), tryToDetermineName(axis.unit(), laxes.contexts[i]));
         };
-                
+
         update(axes, axisSet, nac);
     }
 
@@ -363,7 +363,7 @@ public final class Axes {
         } else {
             // try to get the first non-default axis 
             Axis startAxis = Axis.fromSet(axisSet, 0);
-            
+
             // ensure that it is not the default axis that was used as a fallback
             if (startAxis.dimension() != Axes.DEFAULT_DIMENSION) {
                 var axesToChange = new TreeSet<>(axisSet.tailSet(startAxis, true));

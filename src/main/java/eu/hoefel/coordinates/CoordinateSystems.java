@@ -48,7 +48,7 @@ public final class CoordinateSystems {
 
     /** A set of axes containing only one unitless default axis. */
     private static final NavigableSet<Axis> IDENTITY_AXES = Axes.of(new Axis(Axes.DEFAULT_DIMENSION, Units.EMPTY_UNIT, ""));
-    
+
     static {
         IDENTITY_COORDINATE_SYSTEM = new @CoordinateSystemSymbols("") CoordinateSystem() {
             @Override public int dimension() { return Maths.MAX_ARRAY_SIZE; }
@@ -66,7 +66,6 @@ public final class CoordinateSystems {
                 var map = Map.of(Axes.DEFAULT_DIMENSION, Units.EMPTY_UNIT);
                 return Collections.unmodifiableNavigableMap(new TreeMap<>(map));
             }
-            
         };
 
         Set<Class<? extends CoordinateSystem>> defCoordinates = new LinkedHashSet<>();
@@ -150,7 +149,7 @@ public final class CoordinateSystems {
         checkCoordinateSystemUnits(origin, target);
 
         double[] positionInOriginBase = origin.toBasePoint(position);
-        
+
         // convert to base units of target system
         double[] positionInTargetBase = new double[positionInOriginBase.length];
         for (int i = 0; i < positionInTargetBase.length; i++) {
@@ -162,7 +161,7 @@ public final class CoordinateSystems {
             Unit targetUnit = targetBaseUnits.getOrDefault(i, targetBaseUnits.get(Axes.DEFAULT_DIMENSION));
             positionInTargetBase[i] = Units.convert(positionInOriginBase[i], originUnit, targetUnit);
         }
-        
+
         return target.fromBasePoint(positionInTargetBase);
     }
 
@@ -326,7 +325,7 @@ public final class CoordinateSystems {
      */
     public static final double toDouble(Object o) {
         Objects.requireNonNull(o);
-        
+
         if (Types.isCompatible(double.class, o)) {
             if (Types.boxedClass(o.getClass()) == Character.class) {
                 return (char) o;
