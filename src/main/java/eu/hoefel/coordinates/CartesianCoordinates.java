@@ -85,7 +85,7 @@ public final record CartesianCoordinates(NavigableSet<Axis> axes, int dimension)
     public CartesianCoordinates {
         Objects.requireNonNull(axes, "Axes may not be null. "
                 + "Use the DEFAULT_AXES_<your dimension>D or the empty constructor to get a reasonable default.");
-        
+
         if (dimension < 1) {
             throw new IllegalArgumentException("Dimension must be >0!");
         }
@@ -147,7 +147,7 @@ public final record CartesianCoordinates(NavigableSet<Axis> axes, int dimension)
     public boolean isOrthogonal() {
         return true;
     }
-    
+
     @Override
     public boolean isBasic() {
         return true;
@@ -194,7 +194,6 @@ public final record CartesianCoordinates(NavigableSet<Axis> axes, int dimension)
                     + "(too high dimension, only %d dimensions are supported for Cartesian coordinates)")
                     .formatted(i, j, dimension));
         }
-
 
         return i == j ? 1 : 0;
     }

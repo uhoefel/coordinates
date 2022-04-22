@@ -61,7 +61,7 @@ final class Transformations {
             for (int j = i + 1; j < coords.length; j++) {
                 radicand += Math.pow(coords[j], 2);
             }
-            
+
             ret[i + 1] = Maths.acot(coords[i] / Math.sqrt(radicand));
         }
 

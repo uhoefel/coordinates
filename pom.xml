@@ -3,7 +3,7 @@
 
     <groupId>eu.hoefel</groupId>
     <artifactId>coordinates</artifactId>
-    <version>1.0.5</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
 
     <name>coordinates</name>
@@ -15,8 +15,8 @@
         <uhoefel.git.root>scm:git:ssh://git@github.com/uhoefel/</uhoefel.git.root>
         <junit.jupiter.version>5.8.2</junit.jupiter.version>
         <junit.platform.version>1.8.2</junit.platform.version>
-        <jdk.version>18</jdk.version>
-        <jvm.extraArgs>--enable-preview</jvm.extraArgs>
+        <jdk.version>17</jdk.version>
+        <jvm.extraArgs></jvm.extraArgs>
     </properties>
 
     <url>${uhoefel.git.url}${project.name}</url>
@@ -35,49 +35,54 @@
             <name>Udo Höfel</name>
             <email>udo@hoefel.eu</email>
             <url>http://hoefel.eu</url>
-            <id>uhoefel</id>
+            <id>udoh</id>
         </developer>
     </developers>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
 
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
+            <artifactId>junit-jupiter-params</artifactId>
             <version>${junit.jupiter.version}</version>
-            <scope>compile</scope>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
+            <artifactId>junit-jupiter</artifactId>
             <version>${junit.jupiter.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-launcher</artifactId>
-            <version>${junit.platform.version}</version>
-            <scope>compile</scope>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.jupiter.version}</version>
-            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>18.0.1</version>
         </dependency>
         <dependency>
             <groupId>eu.hoefel</groupId>
             <artifactId>jatex</artifactId>
-            <version>1.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>eu.hoefel</groupId>
-            <artifactId>units</artifactId>
-            <version>2.1.0</version>
+            <version>1.2.0</version>
         </dependency>
         <dependency>
             <groupId>eu.hoefel</groupId>
             <artifactId>utils</artifactId>
-            <version>0.2.3</version>
+            <version>0.3.0</version>
+        </dependency>
+        <dependency>
+        	<groupId>eu.hoefel</groupId>
+        	<artifactId>units</artifactId>
+        	<version>2.2.0</version>
         </dependency>
     </dependencies>
 
@@ -130,12 +135,8 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.2</version>
+                <version>3.4.0</version>
                 <configuration>
-                    <docfilessubdirs>true</docfilessubdirs>
-                    <release>${jdk.version}</release>
-                    <additionalOptions>${jvm.extraArgs}</additionalOptions>
-                    <!--<doclint>none</doclint> To be removed -->
                     <encoding>UTF-8</encoding>
                     <tags>
                         <tag>
@@ -152,12 +153,6 @@
                             <name>implNote</name>
                             <placement>a</placement>
                             <head>Implementation Note:</head>
-                        </tag>
-                        <!-- PLACEHOLDER TILL JAVA 18 IS HERE-->
-                        <tag>
-                            <name>snippet</name>
-                            <placement>a</placement>
-                            <head>SNIPPET TO BE REMOVED WITH JAVA 18</head>
                         </tag>
                     </tags>
                 </configuration>
@@ -226,9 +221,11 @@
                 <version>3.0.0-M6</version>
                 <configuration>
                     <!-- required due to https://github.com/apache/maven-surefire/pull/263 -->
-                    <argLine>${jvm.extraArgs}
-                        --add-exports org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED
-                        --add-exports org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED</argLine>
+                    <argLine>
+                       ${jvm.extraArgs}
+                       --add-exports org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED
+                       --add-exports org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
+                    </argLine>
                 </configuration>
             </plugin>
 

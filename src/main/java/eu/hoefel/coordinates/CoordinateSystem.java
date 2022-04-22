@@ -308,7 +308,6 @@ public interface CoordinateSystem {
      */
     default double jacobianDeterminant(double[] position) {
         Objects.requireNonNull(position);
-
         return Math.sqrt(Maths.determinant(metricTensor(position, TensorIndexType.COVARIANT)));
     }
 
@@ -438,7 +437,7 @@ public interface CoordinateSystem {
         // TensorIndexType.COVARIANT.transform(this, pos -> g, behavior).apply(position)
         // but this transformation relies on the metricTensor method we are in here, so 
         // we would get a stackoverflow error. Consequently, we just invert the metric.
-        
+
         if (behavior == TensorIndexType.CONTRAVARIANT) {
             g = Maths.inverse(g);
         }
@@ -500,7 +499,6 @@ public interface CoordinateSystem {
                     "Specified dimension greater than supported dimensionality (given: %d, supported: %d)"
                     .formatted(i + 1, dimension()));
         }
-
 
         double gii = metricCoefficient(position, TensorIndexType.COVARIANT, i, i);
         return Math.sqrt(gii) * dui;
@@ -684,7 +682,7 @@ public interface CoordinateSystem {
 
             returnVector[sumIndices[0] - 1] += leviCivita * factor / sqrtg;
         }
-        
+
         return behavior.transform(this, pos -> returnVector, behavior.flip()).apply(position);
     }
 
@@ -722,9 +720,9 @@ public interface CoordinateSystem {
             @SuppressWarnings("unchecked")
             T div = (T) divergenceOfMatrixField(position, tensor, componentBehavior, pos -> (double[][]) field.apply(pos));
             return div;
-        } else {
-            throw new IllegalArgumentException("f needs to return either a double[] (i.e. a vector) or a double[][] (i.e. a tensor)");
         }
+
+        throw new IllegalArgumentException("f needs to return either a double[] (i.e. a vector) or a double[][] (i.e. a tensor)");
     }
 
     /**
@@ -751,7 +749,7 @@ public interface CoordinateSystem {
         double[] div = new double[position.length];
         for (int i = 0; i < position.length; i++) {
             div[i] = Maths.partialDerivatives(detTimesVector, 1, position, i)[i];
-        }                               
+        }
 
         return Maths.compensatedSum(div) / sqrtg;
     }
@@ -807,7 +805,7 @@ public interface CoordinateSystem {
                 }
             }
         }
-        
+
         double[] div = new double[tensor.length];
         for (int i = 0; i < summands.length; i++) {
             div[i] = Maths.compensatedSum(summands[i]);
@@ -1140,7 +1138,7 @@ public interface CoordinateSystem {
                         return sum;
                     };
                     double diAj = Maths.derivative(func, 1, position[i]);
-                    
+
                     curl[k] += Maths.leviCivita(i+1,j+1,k+1) * diAj;
                 }
             }

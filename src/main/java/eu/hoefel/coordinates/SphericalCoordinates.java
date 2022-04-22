@@ -63,7 +63,7 @@ public final record SphericalCoordinates(NavigableSet<Axis> axes, int dimension)
 
         for (Axis axis : axes) {
             if (axis.dimension() == 0) continue;
-            
+
             if (!Units.convertible(axis.unit(), Units.EMPTY_UNIT)) {
                 throw new IllegalArgumentException("The unit of dimension %d (%s) needs to be effectively dimensionless."
                         .formatted(axis.dimension(), axis.unit()));
@@ -153,7 +153,7 @@ public final record SphericalCoordinates(NavigableSet<Axis> axes, int dimension)
             pointInCurrentSystem[3] = Math.atan2(position[3],position[2]);
             return pointInCurrentSystem;
         }
-        
+
         return Transformations.cartesianToSpherical(position);
     }
 
@@ -210,7 +210,7 @@ public final record SphericalCoordinates(NavigableSet<Axis> axes, int dimension)
                     + "(too high dimension, only %d dimensions are supported for spherical coordinates)")
                     .formatted(i, j, dimension));
         }
-        
+
         if (behavior instanceof TensorIndexType tit) {
             return switch (tit) {
                 case COVARIANT -> {
@@ -306,7 +306,7 @@ public final record SphericalCoordinates(NavigableSet<Axis> axes, int dimension)
             // fallback to numerics for higher dim
             return CoordinateSystem.super.christoffelSymbol2ndKind(position, m, dim, j);
         }
-        
+
         if (m == 0 && i == 1 && j == 1) return -1*position[0];
         if (m == 0 && i == 2 && j == 2) return -1*position[0]*Math.pow(Math.sin(position[1]),2);
         if (m == 0 && i == 3 && j == 3) return -1*position[0]*Math.pow(Math.sin(position[1]),2)*Math.pow(Math.sin(position[2]),2);
