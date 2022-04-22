@@ -1,6 +1,6 @@
 /**
  * This module provides support for programmatic (generic) coordinate systems,
- * such as {@link CartesianCoordinateSystem}.
+ * such as {@link CartesianCoordinates}.
  * <p>
  * The {@link eu.hoefel.coordinates} is the package containing the base classes
  * needed for the handling of coordinate systems, as well as some basic

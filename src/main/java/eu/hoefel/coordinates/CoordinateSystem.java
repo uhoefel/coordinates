@@ -50,7 +50,7 @@ import eu.hoefel.utils.Types;
  *          {@link #metricTensor(double[], TensorTransformation)} alone. It is
  *          strongly recommended to use a {@link java.lang.Record record} for
  *          the implementation, otherwise it may not work directly with
- *          {@link eu.hoefel.quantities}.
+ *          {@code eu.hoefel.quantities}.
  */
 public interface CoordinateSystem {
 
