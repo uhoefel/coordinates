@@ -80,9 +80,9 @@
             <version>0.3.0</version>
         </dependency>
         <dependency>
-        	<groupId>eu.hoefel</groupId>
-        	<artifactId>units</artifactId>
-        	<version>2.2.0</version>
+            <groupId>eu.hoefel</groupId>
+            <artifactId>units</artifactId>
+            <version>2.2.0</version>
         </dependency>
     </dependencies>
 
