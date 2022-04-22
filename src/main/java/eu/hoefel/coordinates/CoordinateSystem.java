@@ -274,7 +274,7 @@ public interface CoordinateSystem {
      *                         handle varargs. May not be null.
      * @return a new instance of the specified coordinate system
      */
-    public static CoordinateSystem from(String name, Set<Class<? extends CoordinateSystem>> extraCoordinates, Object... args) {
+    public static CoordinateSystem from(String name, Set<? extends Class<? extends CoordinateSystem>> extraCoordinates, Object... args) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(extraCoordinates);
         Objects.requireNonNull(args);
