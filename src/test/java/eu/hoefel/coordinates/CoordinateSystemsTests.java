@@ -106,32 +106,33 @@ class CoordinateSystemsTests {
         CoordinateSystem csys = new CartesianCoordinates(3);
         Function<double[], Double[]> field = xyz -> new Double[] { -xyz[1], xyz[0] * xyz[1], xyz[2] };
 
+        var random = new Random(123L);
         int numPositionsToTest = 15;
         for (int i = 0; i < numPositionsToTest; i++) {
-            double x = 5 * Math.random();
-            double[] pos = new double[] {x, Math.random(), Math.random()};
+            double x = 5 * random.nextDouble();
+            double[] pos = new double[] {x, random.nextDouble(), random.nextDouble()};
             assertEquals(x+1, csys.div(pos, TensorIndexType.CONTRAVARIANT, field), 2.5e-6);
         }
 
         field = xyz -> new Double[] { xyz[0]*xyz[0]-xyz[1]*xyz[1], 2 * xyz[0] * xyz[1] };
         for (int i = 0; i < numPositionsToTest; i++) {
-            double x = Math.random();
-            double[] pos = new double[] {x, Math.random()};
+            double x = random.nextDouble();
+            double[] pos = new double[] {x, random.nextDouble()};
             assertEquals(4*x, csys.div(pos, TensorIndexType.CONTRAVARIANT, field), 1e-5);
         }
 
         field = xyz -> new Double[] { xyz[0], xyz[1], xyz[2] };
         for (int i = 0; i < numPositionsToTest; i++) {
-            double x = Math.random();
-            double[] pos = new double[] {x, Math.random(), Math.random()};
+            double x = random.nextDouble();
+            double[] pos = new double[] {x, random.nextDouble(), random.nextDouble()};
             assertEquals(3, csys.div(pos, TensorIndexType.CONTRAVARIANT, field), 1e-5);
         }
 
         csys = CoordinateSystem.from("cyl");
         field = xyz -> new Double[] { xyz[0], 0.0, xyz[2] };
         for (int i = 0; i < numPositionsToTest; i++) {
-            double x = Math.random();
-            double[] pos = new double[] {x, Math.random(), Math.random()};
+            double x = random.nextDouble();
+            double[] pos = new double[] {x, random.nextDouble(), random.nextDouble()};
             assertEquals(3, csys.div(pos, TensorIndexType.CONTRAVARIANT, field), 1e-5);
         }
 
@@ -147,12 +148,13 @@ class CoordinateSystemsTests {
     void testMagnitude() {
         CoordinateSystem csys = new CartesianCoordinates(3);
         int numPositionsToTest = 15;
+        var random = new Random(1234L);
 
         // test scalar field
         Function<double[], Double> scalarfield = xyz -> -xyz[1];
         for (int i = 0; i < numPositionsToTest; i++) {
-            double y = (Math.random() > 0.5 ? 1 : -1) * 5 * Math.random();
-            double[] pos = {Math.random(), y, Math.random()};
+            double y = (random.nextDouble() > 0.5 ? 1 : -1) * 5 * random.nextDouble();
+            double[] pos = {random.nextDouble(), y, random.nextDouble()};
             assertEquals(Math.abs(y), csys.magnitude(pos, TensorIndexType.CONTRAVARIANT, scalarfield));
             assertEquals(Math.abs(y), csys.magnitude(pos, TensorIndexType.COVARIANT, scalarfield));
         }
@@ -160,9 +162,9 @@ class CoordinateSystemsTests {
         // test vector field
         Function<double[], double[]> vectorfield = xyz -> new double[] { -xyz[1], xyz[0] * xyz[1], xyz[2] };
         for (int i = 0; i < numPositionsToTest; i++) {
-            double x = 5 * Math.random();
-            double y = (Math.random() > 0.5 ? 1 : -1) * Math.random();
-            double z = Math.random();
+            double x = 5 * random.nextDouble();
+            double y = (random.nextDouble() > 0.5 ? 1 : -1) * random.nextDouble();
+            double z = random.nextDouble();
             double[] pos = {x, y, z};
             assertEquals(Math.sqrt(y*y + x*y*x*y + z*z), csys.magnitude(pos, TensorIndexType.CONTRAVARIANT, vectorfield), 2.5e-7);
             assertEquals(Math.sqrt(y*y + x*y*x*y + z*z), csys.magnitude(pos, TensorIndexType.COVARIANT, vectorfield), 2.5e-7);
@@ -171,9 +173,9 @@ class CoordinateSystemsTests {
         csys = CoordinateSystem.from("cyl");
         vectorfield = xyz -> new double[] { xyz[0], xyz[1], xyz[2] };
         for (int i = 0; i < numPositionsToTest; i++) {
-            double x = Math.random();
-            double y = Math.random();
-            double z = (Math.random() > 0.5 ? 1 : -1) * Math.random();
+            double x = random.nextDouble();
+            double y = random.nextDouble();
+            double z = (random.nextDouble() > 0.5 ? 1 : -1) * random.nextDouble();
             double[] pos = new double[] {x, y, z};
             // the x^2 before y^2 is due to the metric tensor coefficient at g22=r^2
             assertEquals(Math.sqrt(x*x + x*x*y*y + z*z), csys.magnitude(pos, TensorIndexType.CONTRAVARIANT, vectorfield), 1e-7);
@@ -182,9 +184,9 @@ class CoordinateSystemsTests {
         // tensor rank 2
         Function<double[], double[][]> tensorfield = xyz -> new double[][] {{ xyz[0], xyz[1], xyz[2] }, { 1.5*xyz[0], 1.5*xyz[1], 1.5*xyz[2] }, { 2*xyz[0], 2*xyz[1], 2*xyz[2] }};
         for (int i = 0; i < numPositionsToTest; i++) {
-            double x = Math.random();
-            double y = Math.random();
-            double z = (Math.random() > 0.5 ? 1 : -1) * Math.random();
+            double x = random.nextDouble();
+            double y = random.nextDouble();
+            double z = (random.nextDouble() > 0.5 ? 1 : -1) * random.nextDouble();
             double[] pos = new double[] {x, y, z};
 
             double correction = x*x;
