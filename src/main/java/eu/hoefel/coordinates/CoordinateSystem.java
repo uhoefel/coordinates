@@ -711,10 +711,17 @@ public interface CoordinateSystem {
         Objects.requireNonNull(componentBehavior);
         Objects.requireNonNull(field);
 
-        T[] t = field.apply(position);
-        if (t instanceof Double[]) { // ugh, will be good when this will be replaceable with double[]. Valhalla probably...
+        Object t = field.apply(position);
+        if (t instanceof double[]) {
             @SuppressWarnings("unchecked")
-            T div = (T) divergenceOfVectorField(position, componentBehavior, pos -> (Double[]) field.apply(pos));
+            T div = (T) divergenceOfVectorField(position, componentBehavior, pos -> (double[]) (Object) field.apply(pos));
+            return div;
+        } else if (t instanceof Double[]) { // ugh, will be good when this will be replaceable with double[]. Valhalla probably...
+            @SuppressWarnings("unchecked")
+            T div = (T) divergenceOfVectorField(position, componentBehavior, pos -> {
+                var applied = field.apply(pos);
+                return Types.unbox(applied);
+            });
             return div;
         } else if (t instanceof double[][] tensor) {
             @SuppressWarnings("unchecked")
@@ -734,12 +741,12 @@ public interface CoordinateSystem {
      * @param vectorfield       the vector field
      * @return the vector field divergence at the given position
      */
-    private Double divergenceOfVectorField(double[] position, TensorTransformation componentBehavior, Function<double[], Double[]> vectorfield) {
+    private Double divergenceOfVectorField(double[] position, TensorTransformation componentBehavior, UnaryOperator<double[]> vectorfield) {
         double sqrtg = jacobianDeterminant(position);
 
         UnaryOperator<double[]> detTimesVector = pos -> {
             double jd = jacobianDeterminant(pos);
-            double[] vec = Types.unbox(componentBehavior.transform(this, vectorfield, TensorIndexType.CONTRAVARIANT).apply(pos)); // TODO remove boxing when Valhalla is there
+            double[] vec = componentBehavior.transform(this, vectorfield, TensorIndexType.CONTRAVARIANT).apply(pos);
             for (int i = 0; i < vec.length; i++) {
                 vec[i] *= jd;
             }
