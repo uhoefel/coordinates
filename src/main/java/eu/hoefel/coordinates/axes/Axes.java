@@ -1,5 +1,7 @@
 package eu.hoefel.coordinates.axes;
 
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,7 +12,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 import eu.hoefel.coordinates.CoordinateSystem;
@@ -73,7 +74,7 @@ public final class Axes {
     /** An empty set representing no axis names. */
     private static final NavigableSet<String> EMPTY_AXIS_NAMES = Collections.unmodifiableNavigableSet(new TreeSet<>());
 
-    private static final Logger logger = Logger.getLogger(Axes.class.getName());
+    private static final Logger logger = System.getLogger(Axes.class.getName());
 
     /**
      * Constructor.
@@ -425,7 +426,7 @@ public final class Axes {
         NavigableSet<Axis> ret = new TreeSet<>(AXIS_DIM_COMPARATOR);
         for (Axis axis : axes) {
             if (!ret.add(axis)) {
-                logger.warning(() -> "Overriding already existing axis for dimension %d!".formatted(axis.dimension()));
+                logger.log(Level.WARNING, () -> "Overriding already existing axis for dimension %d!".formatted(axis.dimension()));
             }
         }
         return Collections.unmodifiableNavigableSet(ret);
