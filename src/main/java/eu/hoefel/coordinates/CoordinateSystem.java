@@ -44,13 +44,15 @@ import eu.hoefel.utils.Types;
  *      Analysis in a Euclidean Space by Rebecca Moss Brannon</a>
  * @see <a href="http://faculty.ce.berkeley.edu/sanjay/ce231mse211/curvi.pdf">A
  *      Quick Overview of Curvilinear Coordinates</a>
- * @apiNote Implementations have to either implement
- *          {@link #toBasePoint(double[])} and {@link #fromBasePoint(double[])}.
- *          A limited subset of features can be provided by providing the
- *          {@link #metricTensor(double[], TensorTransformation)} alone. It is
- *          strongly recommended to use a {@link java.lang.Record record} for
- *          the implementation, otherwise it may not work directly with
- *          {@code eu.hoefel.quantities}.
+ * @coordinates.apiNote Implementations have to either implement
+ *                      {@link #toBasePoint(double[])} and
+ *                      {@link #fromBasePoint(double[])}. A limited subset of
+ *                      features can be provided by providing the
+ *                      {@link #metricTensor(double[], TensorTransformation)}
+ *                      alone. It is strongly recommended to use a
+ *                      {@link java.lang.Record record} for the implementation,
+ *                      otherwise it may not work directly with
+ *                      {@code eu.hoefel.quantities}.
  */
 public interface CoordinateSystem {
 
@@ -199,15 +201,16 @@ public interface CoordinateSystem {
      * "cart" for {@link CartesianCoordinates}.
      * 
      * @return the list of symbols, starting with the preferred symbol
-     * 
-     * @implNote The default implementation takes the symbols as obtained from the
-     *           {@link CoordinateSystemSymbols} annotation that is recommended to be
-     *           present for the coordinate system implementation. The default
-     *           implementation will use an empty list if this annotation is not
-     *           present, which means that string based methods like e.g.
-     *           {@link CoordinateSystems#transform(double[], String, String, Set)}
-     *           will not recognize the coordinate system if the given arguments do
-     *           not allow a successful instantiation.
+     * @coordinates.implNote The default implementation takes the symbols as
+     *                       obtained from the {@link CoordinateSystemSymbols}
+     *                       annotation that is recommended to be present for the
+     *                       coordinate system implementation. The default
+     *                       implementation will use an empty list if this
+     *                       annotation is not present, which means that string
+     *                       based methods like e.g.
+     *                       {@link CoordinateSystems#transform(double[], String, String, Set)}
+     *                       will not recognize the coordinate system if the given
+     *                       arguments do not allow a successful instantiation.
      */
     default List<String> symbols() {
         return CoordinateSystems.symbolsFromClass(this.getClass());
@@ -444,7 +447,7 @@ public interface CoordinateSystem {
 
         return g;
     }
-    
+
     /**
      * Gets a single metric coefficient from the metric tensor for the specified
      * tensor transformation behavior (i.e., either {@link TensorIndexType#COVARIANT
@@ -457,12 +460,14 @@ public interface CoordinateSystem {
      * @param i        the row index in the metric tensor
      * @param j        the column index in the metric tensor
      * @return the metric tensor coefficient
-     * 
-     * @implNote The default implementation gets the full metric tensor (which might
-     *           be an expensive operation) and returns just the single coefficient
-     *           the user asked for. If multiple coefficients are required it is
-     *           advisable to use {@link #metricTensor(double[], TensorTransformation)}
-     *           and access the coefficients from the locally stored full tensor.
+     * @coordinates.implNote The default implementation gets the full metric tensor
+     *                       (which might be an expensive operation) and returns
+     *                       just the single coefficient the user asked for. If
+     *                       multiple coefficients are required it is advisable to
+     *                       use
+     *                       {@link #metricTensor(double[], TensorTransformation)}
+     *                       and access the coefficients from the locally stored
+     *                       full tensor.
      */
     default double metricCoefficient(double[] position, TensorTransformation behavior, int i, int j) {
         Objects.requireNonNull(position);
